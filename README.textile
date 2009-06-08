@@ -15,7 +15,7 @@ which will enumerate the files in the given glob, determining the proper
 order to load them in.  So, to load all the Ruby files under the 'lib'
 directory, just do:
 
- <code>>load_glob 'lib/**/*.rb'</code>
+ <code>load_glob 'lib/**/*.rb'</code>
 
 If the dependencies are unresolvable, it will throw the first unresolvable
 NameError.
