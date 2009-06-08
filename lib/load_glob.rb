@@ -37,7 +37,8 @@ module LoadGlob
           #
           # FIXME: If you can understand ActiveSupport's dependencies.rb 
           # better than I do I would *love* to find a better solution
-          raise ex unless ex["is not missing constant"]
+          raise unless ex.message["is not missing constant"]
+          
           STDERR.puts "Warning: load_glob swallowed ActiveSupport 'is not missing constant' error"
           STDERR.puts ex.backtrace[0..9]
         end
