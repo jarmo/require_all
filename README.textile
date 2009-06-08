@@ -1,7 +1,7 @@
 h1. load_glob
 
 Tired of futzing around with require statements everywhere, littering your
-code with <code><pre>require File.dirname(__FILE__)</pre></code> crap?  What if you could just point something
+code with <code>require File.dirname(__FILE__)</code> crap?  What if you could just point something
 at a big directory full of code and have everything just automagically load 
 regardless of the dependency structure?  Wouldn't that be oh so nice?
 
@@ -9,13 +9,13 @@ Well, now you can!
 
 This gem defines a single method on main:
 
- <code><pre>load_glob(glob)</code></pre>
+ <code>load_glob(glob)</code>
 
 which will enumerate the files in the given glob, determining the proper
 order to load them in.  So, to load all the Ruby files under the 'lib'
 directory, just do:
 
- <code><pre>load_glob 'lib/**/*.rb'</code></pre>
+ <code>>load_glob 'lib/**/*.rb'</code>
 
 If the dependencies are unresolvable, it will throw the first unresolvable
 NameError.
