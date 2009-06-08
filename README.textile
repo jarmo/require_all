@@ -32,14 +32,14 @@ horrible ActiveSupport's dependencies.rb hijacking of const_missing and
 someone described the approach Merb used to me.  It was so simple and clean!
 Here's how it works:
 
-1. Enumerate the files in the glob
-2. Try to load all of the files.  If we encounter a NameError loading a 
-   particular file, store that file in a "try to load it later" list.
-3. If all the files loaded, great, we're done!  If not, go through the
-   "try to load it later" list again rescuing NameErrors the same way.
-4. If we walk the whole "try to load it later" list and it doesn't shrink
-   at all, we've encountered an unresolvable dependency.  In this case,
-   load_glob will rethrow the first NameError it encountered.
+# Enumerate the files in the glob
+# Try to load all of the files.  If we encounter a NameError loading a 
+  particular file, store that file in a "try to load it later" list.
+# If all the files loaded, great, we're done!  If not, go through the
+  "try to load it later" list again rescuing NameErrors the same way.
+# If we walk the whole "try to load it later" list and it doesn't shrink
+  at all, we've encountered an unresolvable dependency.  In this case,
+  load_glob will rethrow the first NameError it encountered.
 
 h2. Questions? Concerns?
 
