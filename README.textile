@@ -1,0 +1,48 @@
+h1. load_glob
+
+Tired of futzing around with require statements everywhere, littering your
+code with require File(__dirname__) crap?  What if you could just point
+something at a big directory full of code and have it just load in everything
+regardless of code dependencies?  Wouldn't that be oh so nice?
+
+This gem defines a single method on Kernel:
+
+ load_glob(glob)
+
+which will enumerate the files in the given glob, determining the proper
+order to load them in.  So, to load all the Ruby files under the 'lib'
+directory, just do:
+
+ load_glob 'lib/**/*.rb'
+
+If the dependencies are unresolvable, it will throw the first unresolvable
+NameError.
+
+That's it!
+
+h2. Methodology
+
+I didn't invent the approach this gem uses.  It was shamelessly stolen from
+Merb.  Once upon a time at MountainWest RubyConf we were discussing how 
+horrible ActiveSupport's dependencies.rb hijacking of const_missing and
+someone described the approach Merb used to me.  It was so simple and clean!
+Here's how it works:
+
+1. Enumerate the files in the glob
+2. Try to load all of the files.  If we encounter a NameError loading a 
+   particular file, store that file in a "try to load it later" list.
+3. If all the files loaded, great, we're done!  If not, go through the
+   "try to load it later" list again rescuing NameErrors the same way.
+4. If we walk the whole "try to load it later" list and it doesn't shrink
+   at all, we've encountered an unresolvable dependency.  In this case,
+   load_glob will rethrow the first NameError it encountered.
+
+h2. Questions? Concerns?
+
+You can reach the author on github or freenode: "tarcieri"
+
+Or by email: tony@medioh.com
+
+The Github issue tracker is here:
+
+http://github.com/tarcieri/load_glob/issues
