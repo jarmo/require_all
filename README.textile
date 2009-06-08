@@ -15,7 +15,12 @@ which will enumerate the files in the given glob, determining the proper
 order to load them in.  So, to load all the Ruby files under the 'lib'
 directory, just do:
 
- <code>load_glob 'lib/**/*.rb'</code>
+ <code>
+ require 'rubygems'
+ require 'load_glob'
+ 
+ load_glob 'lib/**/*.rb'
+ </code>
 
 If the dependencies are unresolvable, it will throw the first unresolvable
 NameError.
@@ -48,3 +53,7 @@ Or by email: tony@medioh.com
 The Github issue tracker is here:
 
 http://github.com/tarcieri/load_glob/issues
+
+h2. License
+
+MIT (see the LICENSE file for details)

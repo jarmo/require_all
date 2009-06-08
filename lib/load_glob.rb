@@ -1,3 +1,9 @@
+#--
+# Copyright (C)2009 Tony Arcieri
+# You can redistribute this under the terms of the MIT license
+# See file LICENSE for details
+#++
+
 module LoadGlob
   # Load all files matching the given glob, handling dependencies between
   # the files gracefully
