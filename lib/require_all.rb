@@ -10,11 +10,13 @@ module RequireAll
   def require_all(args)
     case args
     when Array
-      files = args.map { |file| File.expand_path file }
+      files = args
     when String
-      files = Dir[args].map { |file| File.expand_path file }
+      files = Dir[args]
     else raise ArgumentError, "require_all doesn't like #{args.class}, sorry"
     end
+    
+    files.map! { |file| File.expand_path file }
             
     begin
       failed = []
