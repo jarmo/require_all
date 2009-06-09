@@ -21,6 +21,7 @@ describe "require_all" do
   describe "syntactic sugar" do
     before :all do
       @base_dir = File.dirname(__FILE__) + '/fixtures/resolvable/'
+      @file_list = ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| @base_dir + f }
     end
     
     it "works like a drop-in require replacement" do
@@ -29,7 +30,7 @@ describe "require_all" do
     end
     
     it "accepts lists of files" do
-      require_all ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| @base_dir + f }
+      require_all @file_list
     end
   end
 end
