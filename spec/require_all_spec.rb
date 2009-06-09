@@ -27,5 +27,9 @@ describe "require_all" do
       require_all @base_dir + 'c.rb'
       defined?(C).should == "constant"
     end
+    
+    it "accepts lists of files" do
+      require_all ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| @base_dir + f }
+    end
   end
 end

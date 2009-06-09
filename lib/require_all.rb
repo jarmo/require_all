@@ -7,8 +7,14 @@
 module RequireAll
   # Load all files matching the given glob, handling dependencies between
   # the files gracefully
-  def require_all(glob)
-    files = Dir[glob].map { |file| File.expand_path file }
+  def require_all(args)
+    case args
+    when Array
+      files = args.map { |file| File.expand_path file }
+    when String
+      files = Dir[args].map { |file| File.expand_path file }
+    else raise ArgumentError, "require_all doesn't like #{args.class}, sorry"
+    end
             
     begin
       failed = []
