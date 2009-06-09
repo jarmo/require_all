@@ -5,18 +5,25 @@
 #++
 
 module RequireAll
-  # Load all files matching the given glob, handling dependencies between
-  # the files gracefully
-  # One of the easiest ways to require_all is to give it a glob, which will 
-  # enumerate all the matching files and load them in the proper order. For 
-  # example, to load all the Ruby files under the 'lib' directory, just do:
+  # A wonderfully simple way to load your code.
   #
-  #  require_all 'lib/**/*.rb'
+  # The easiest way to use require_all is to just point it at a directory
+  # containing a bunch of .rb files.  These files can be nested under 
+  # subdirectories as well:
+  #
+  #  require_all 'lib'
+  #
+  # This will find all the .rb files under the lib directory and load them.
+  # The proper order to load them in will be determined automatically.
   #
   # If the dependencies between the matched files are unresolvable, it will 
   # throw the first unresolvable NameError.
   #
-  # Don't want to give it a glob?  Just give it a list of files:
+  # You can also give it a glob, which will enumerate all the matching files: 
+  #
+  #  require_all 'lib/**/*.rb'
+  #
+  # It will also accept an array of files:
   #
   #  require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file(f) }
   # 
@@ -24,8 +31,6 @@ module RequireAll
   #
   #  require_all 'lib/a.rb', 'lib/b.rb', 'lib/c.rb', 'lib/d.rb'
   #
-  # It's just that easy!  Code loading shouldn't be hard, especially in a language
-  # as versatile as ruby.
   def require_all(*args)
     # Handle passing an array as an argument
     args = args.flatten
@@ -37,14 +42,21 @@ module RequireAll
       arg = args.first
       begin
         # Try assuming we're doing plain ol' require compat
-        File.stat(arg)
-        files = [arg]
+        stat = File.stat(arg)
+        
+        if stat.file?
+          files = [arg]
+        elsif stat.directory?
+          files = Dir.glob "#{arg}/**/*.rb"
+        else
+          raise ArgumentError, "#{arg} isn't a file or directory"
+        end
       rescue Errno::ENOENT
         # If the stat failed, maybe we have a glob!
         files = Dir.glob arg
         
         # If we ain't got no files, the glob failed
-        raise LoadError, 'no such file to load -- #{arg}' if files.empty?
+        raise LoadError, "no such file to load -- #{arg}" if files.empty?
       end
     end
     

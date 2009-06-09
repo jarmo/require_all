@@ -19,22 +19,29 @@ describe "require_all" do
   end
   
   describe "syntactic sugar" do
-    before :all do
-      @base_dir = File.dirname(__FILE__) + '/fixtures/resolvable/'
-      @file_list = ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| @base_dir + f }
+    before :each do
+      @base_dir = File.dirname(__FILE__) + '/fixtures/resolvable'
+      @file_list = ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| "#{@base_dir}/#{f}" }   
     end
     
     it "works like a drop-in require replacement" do
-      require_all @base_dir + 'c.rb'
-      defined?(C).should == "constant"
+      require_all(@base_dir + '/c.rb').should be_true
     end
     
     it "accepts lists of files" do
-      require_all @file_list
+      require_all(@file_list).should be_true
     end
     
     it "is totally cool with a splatted list of arguments" do
-      require_all *@file_list
+      require_all(*@file_list).should be_true
+    end
+    
+    it "will load all .rb files under a directory without a trailing slash" do
+      require_all(@base_dir).should be_true
+    end
+    
+    it "will load all .rb files under a directory with a trailing slash" do
+      require_all("#{@base_dir}/").should be_true
     end
   end
 end
