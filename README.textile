@@ -15,9 +15,19 @@ You can now require_all in a multitude of different ways:
 
  <code>require_all *args</code>
 
-One of the easiest ways to require_all is to give it a glob, which will 
-enumerate all the matching files and load them in the proper order. For 
-example, to load all the Ruby files under the 'lib' directory, just do:
+The easiest way to use require_all is to just point it at a directory
+containing a bunch of .rb files.  These files can be nested under 
+subdirectories as well:
+
+ <code>require_all 'lib'</code>
+
+This will find all the .rb files under the lib directory and load them.
+The proper order to load them in will be determined automatically.
+
+If the dependencies between the matched files are unresolvable, it will 
+throw the first unresolvable NameError.
+
+You can also give it a glob, which will enumerate all the matching files: 
 
  <code>require_all 'lib/**/*.rb'</code>
 
