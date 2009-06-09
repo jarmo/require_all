@@ -17,4 +17,11 @@ describe "require_all" do
       end.should raise_error(NameError)
     end
   end
+  
+  describe "syntactic sugar" do
+    it "works like a drop-in require replacement" do
+      require_all File.dirname(__FILE__) + '/fixtures/resolvable/c.rb'
+      defined?(C).should == "constant"
+    end
+  end
 end
