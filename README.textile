@@ -31,7 +31,7 @@ You can also give it a glob, which will enumerate all the matching files:
 
 It will also accept an array of files:
 
- <code>require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file(f) }</code>
+ <code>require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file? f }</code>
  
 Or if you want, just list the files directly as arguments:
 
