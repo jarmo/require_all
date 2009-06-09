@@ -11,7 +11,7 @@ Wouldn't that be nice?  Well, now you can!
 
  <code>require 'require_all'</code>
 
-You can now require_all in a multitude of different ways.
+You can use require_all in a multitude of different ways.
 
 The easiest way to use require_all is to just point it at a directory
 containing a bunch of .rb files.  These files can be nested under 
