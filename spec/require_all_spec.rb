@@ -19,8 +19,12 @@ describe "require_all" do
   end
   
   describe "syntactic sugar" do
+    before :all do
+      @base_dir = File.dirname(__FILE__) + '/fixtures/resolvable/'
+    end
+    
     it "works like a drop-in require replacement" do
-      require_all File.dirname(__FILE__) + '/fixtures/resolvable/c.rb'
+      require_all @base_dir + 'c.rb'
       defined?(C).should == "constant"
     end
   end
