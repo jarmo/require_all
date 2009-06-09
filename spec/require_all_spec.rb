@@ -32,5 +32,9 @@ describe "require_all" do
     it "accepts lists of files" do
       require_all @file_list
     end
+    
+    it "is totally cool with a splatted list of arguments" do
+      require_all *@file_list
+    end
   end
 end

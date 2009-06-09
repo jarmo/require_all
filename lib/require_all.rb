@@ -7,13 +7,26 @@
 module RequireAll
   # Load all files matching the given glob, handling dependencies between
   # the files gracefully
-  def require_all(args)
-    case args
-    when Array
+  def require_all(*args)
+    # Handle passing an array as an argument
+    args = args.flatten
+    
+    if args.size > 1
+      # If we got a list, those be are files!
       files = args
-    when String
-      files = Dir[args]
-    else raise ArgumentError, "require_all doesn't like #{args.class}, sorry"
+    else
+      arg = args.first
+      begin
+        # Try assuming we're doing plain ol' require compat
+        File.stat(arg)
+        files = [arg]
+      rescue Errno::ENOENT
+        # If the stat failed, maybe we have a glob!
+        files = Dir.glob arg
+        
+        # If we ain't got no files, the glob failed
+        raise LoadError, 'no such file to load -- #{arg}' if files.empty?
+      end
     end
     
     files.map! { |file| File.expand_path file }
