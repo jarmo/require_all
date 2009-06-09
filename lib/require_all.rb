@@ -4,10 +4,10 @@
 # See file LICENSE for details
 #++
 
-module LoadGlob
+module RequireAll
   # Load all files matching the given glob, handling dependencies between
   # the files gracefully
-  def load_glob(glob)
+  def require_all(glob)
     files = Dir[glob].map { |file| File.expand_path file }
             
     begin
@@ -39,7 +39,7 @@ module LoadGlob
           # better than I do I would *love* to find a better solution
           raise unless ex.message["is not missing constant"]
           
-          STDERR.puts "Warning: load_glob swallowed ActiveSupport 'is not missing constant' error"
+          STDERR.puts "Warning: require_all swallowed ActiveSupport 'is not missing constant' error"
           STDERR.puts ex.backtrace[0..9]
         end
       end
@@ -57,4 +57,4 @@ module LoadGlob
   end
 end
 
-include LoadGlob
+include RequireAll

@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../lib/load_glob.rb'
+require File.dirname(__FILE__) + '/../lib/require_all.rb'
 
-describe "load_glob" do    
+describe "require_all" do    
   it "handles load ordering when dependencies are resolvable" do
-    load_glob File.dirname(__FILE__) + '/fixtures/resolvable/*.rb'
+    require_all File.dirname(__FILE__) + '/fixtures/resolvable/*.rb'
     
     defined?(A).should == "constant"
     defined?(B).should == "constant"
@@ -12,7 +12,7 @@ describe "load_glob" do
   
   it "raises NameError if dependencies can't be resolved" do
     proc do 
-      load_glob File.dirname(__FILE__) + '/fixtures/unresolvable/*.rb'
+      require_all File.dirname(__FILE__) + '/fixtures/unresolvable/*.rb'
     end.should raise_error(NameError)
   end
 end

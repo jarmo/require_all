@@ -1,4 +1,6 @@
-h1. load_glob
+h1. require_all
+
+A wonderfully simple way to load your code.
 
 Tired of futzing around with require statements everywhere, littering your code
 with <code>require File.dirname(__FILE__)</code> crap?  What if you could just 
@@ -7,22 +9,20 @@ automagically load regardless of the dependency structure?
 
 Wouldn't that be nice?  Well, now you can!
 
- <code>require 'load_glob'</code>
+ <code>require 'require_all'</code>
 
-This gem defines a single method on main:
+You can now require_all in a multitude of different ways:
 
- <code>load_glob(glob)</code>
+ <code>require_all *args</code>
 
-which will enumerate the files in the given glob, determining the proper
-order to load them in.  So, to load all the Ruby files under the 'lib'
-directory, just do:
+One of the easiest ways to require_all is to give it a glob, which will 
+enumerate all the matching files and load them in the proper order. For 
+example, to load all the Ruby files under the 'lib' directory, just do:
 
- <code>load_glob 'lib/**/*.rb'</code>
+ <code>require_all 'lib/**/*.rb'</code>
 
-If the dependencies are unresolvable, it will throw the first unresolvable
-NameError.
-
-That's it!
+If the dependencies between the matched files are unresolvable, it will 
+throw the first unresolvable NameError.
 
 h2. Methodology
 
@@ -39,17 +39,17 @@ Here's how it works:
   "try to load it later" list again rescuing NameErrors the same way.
 # If we walk the whole "try to load it later" list and it doesn't shrink
   at all, we've encountered an unresolvable dependency.  In this case,
-  load_glob will rethrow the first NameError it encountered.
+  require_all will rethrow the first NameError it encountered.
 
 h2. Questions? Comments? Concerns?
 
 You can reach the author on github or freenode: "tarcieri"
 
-Or by email: tony@medioh.com
+Or by email: "tony@medioh.com":mailto:tony@medioh.com
 
 The Github issue tracker is here:
 
-http://github.com/tarcieri/load_glob/issues
+"http://github.com/tarcieri/require_all/issues":http://github.com/tarcieri/require_all/issues
 
 h2. License
 
