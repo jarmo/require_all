@@ -41,7 +41,7 @@ Here's how it works:
   at all, we've encountered an unresolvable dependency.  In this case,
   load_glob will rethrow the first NameError it encountered.
 
-h2. Questions? Concerns?
+h2. Questions? Comments? Concerns?
 
 You can reach the author on github or freenode: "tarcieri"
 
