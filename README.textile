@@ -21,10 +21,9 @@ containing a bunch of .rb files:
 This will find all the .rb files under the lib directory (including all 
 subdirectories as well) and load them.
 
-The proper order to in which to load them is determined automatically.
-
-If the dependencies between the matched files are unresolvable, it will 
-throw the first unresolvable NameError.
+The proper order to in which to load them is determined automatically.  If the 
+dependencies between the matched files are unresolvable, it will throw the 
+first unresolvable NameError.
 
 You can also give it a glob, which will enumerate all the matching files: 
 
