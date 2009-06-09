@@ -24,6 +24,10 @@ example, to load all the Ruby files under the 'lib' directory, just do:
 If the dependencies between the matched files are unresolvable, it will 
 throw the first unresolvable NameError.
 
+Don't want to give it a glob?  Just give it a list of files:
+
+ <code>require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file(f) }</code>
+
 h2. Methodology
 
 I didn't invent the approach this gem uses.  It was shamelessly stolen from
@@ -47,9 +51,9 @@ You can reach the author on github or freenode: "tarcieri"
 
 Or by email: "tony@medioh.com":mailto:tony@medioh.com
 
-The Github issue tracker is here:
+Got issues with require_all to report?  Post 'em here:
 
-"http://github.com/tarcieri/require_all/issues":http://github.com/tarcieri/require_all/issues
+"Github Tracker":http://github.com/tarcieri/require_all/issues
 
 h2. License
 
