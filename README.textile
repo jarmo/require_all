@@ -14,13 +14,14 @@ Wouldn't that be nice?  Well, now you can!
 You can use require_all in a multitude of different ways.
 
 The easiest way to use require_all is to just point it at a directory
-containing a bunch of .rb files.  These files can be nested under 
-subdirectories as well:
+containing a bunch of .rb files:
 
  <code>require_all 'lib'</code>
 
-This will find all the .rb files under the lib directory and load them.
-The proper order to load them in will be determined automatically.
+This will find all the .rb files under the lib directory (including all 
+subdirectories as well) and load them.
+
+The proper order to in which to load them is determined automatically.
 
 If the dependencies between the matched files are unresolvable, it will 
 throw the first unresolvable NameError.
