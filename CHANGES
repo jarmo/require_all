@@ -1,3 +1,4 @@
 1.0.0:
 
-* Initial release
+* Initial release (was originally load_glob, converted to require_all which is
+  a lot cooler, seriously trust me)
