@@ -42,10 +42,7 @@ It's just that easy!  Code loading shouldn't be hard.
 h2. Methodology
 
 I didn't invent the approach this gem uses.  It was shamelessly stolen from
-Merb.  Once upon a time at MountainWest RubyConf we were discussing how 
-horrible ActiveSupport's dependencies.rb hijacking of const_missing and
-someone described the approach Merb used to me.  It was so simple and clean!
-Here's how it works:
+Merb (which apparently stole it from elsewhere).  Here's how it works:  
 
 # Enumerate the files in the glob
 # Try to load all of the files.  If we encounter a NameError loading a 
