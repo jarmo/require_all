@@ -7,6 +7,25 @@
 module RequireAll
   # Load all files matching the given glob, handling dependencies between
   # the files gracefully
+  # One of the easiest ways to require_all is to give it a glob, which will 
+  # enumerate all the matching files and load them in the proper order. For 
+  # example, to load all the Ruby files under the 'lib' directory, just do:
+  #
+  #  require_all 'lib/**/*.rb'
+  #
+  # If the dependencies between the matched files are unresolvable, it will 
+  # throw the first unresolvable NameError.
+  #
+  # Don't want to give it a glob?  Just give it a list of files:
+  #
+  #  require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file(f) }
+  # 
+  # Or if you want, just list the files directly as arguments:
+  #
+  #  require_all 'lib/a.rb', 'lib/b.rb', 'lib/c.rb', 'lib/d.rb'
+  #
+  # It's just that easy!  Code loading shouldn't be hard, especially in a language
+  # as versatile as ruby.
   def require_all(*args)
     # Handle passing an array as an argument
     args = args.flatten
