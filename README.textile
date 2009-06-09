@@ -29,10 +29,7 @@ You can also give it a glob, which will enumerate all the matching files:
 
  <code>require_all 'lib/**/*.rb'</code>
 
-If the dependencies between the matched files are unresolvable, it will 
-throw the first unresolvable NameError.
-
-Don't want to give it a glob?  Just give it a list of files:
+It will also accept an array of files:
 
  <code>require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file(f) }</code>
  
