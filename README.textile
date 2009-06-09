@@ -32,8 +32,7 @@ Or if you want, just list the files directly as arguments:
 
  <code>require_all 'lib/a.rb', 'lib/b.rb', 'lib/c.rb', 'lib/d.rb'</code>
  
-It's just that easy!  Code loading shouldn't be hard, especially in a language
-as versatile as ruby.
+It's just that easy!  Code loading shouldn't be hard.
 
 h2. Methodology
 
