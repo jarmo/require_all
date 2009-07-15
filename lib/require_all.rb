@@ -47,7 +47,7 @@ module RequireAll
         if stat.file?
           files = [arg]
         elsif stat.directory?
-          files = Dir.glob "#{arg}/**/*.rb"
+          files = Dir.glob File.join(arg, '**', '*.rb')
         else
           raise ArgumentError, "#{arg} isn't a file or directory"
         end
