@@ -55,6 +55,12 @@ module RequireAll
         # If the stat failed, maybe we have a glob!
         files = Dir.glob arg
         
+        # Maybe it's an .rb file and the .rb was omitted
+        if File.file?(arg + '.rb')
+          require(arg + '.rb')
+          return true
+        end
+        
         # If we ain't got no files, the glob failed
         raise LoadError, "no such file to load -- #{arg}" if files.empty?
       end
@@ -106,6 +112,13 @@ module RequireAll
     end until failed.empty?
     
     true
+  end
+  
+  # Works like require_all, but paths are relative to the caller rather than 
+  # the current working directory
+  def require_rel(path)
+    source_directory = File.dirname(caller.first.sub(/:\d+$/, ''))
+    require_all File.join(source_directory, path)
   end
 end
 

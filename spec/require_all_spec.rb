@@ -25,7 +25,7 @@ describe "require_all" do
     end
     
     it "works like a drop-in require replacement" do
-      require_all(@base_dir + '/c.rb').should be_true
+      require_all(@base_dir + '/c').should be_true
     end
     
     it "accepts lists of files" do
@@ -43,5 +43,15 @@ describe "require_all" do
     it "will load all .rb files under a directory with a trailing slash" do
       require_all("#{@base_dir}/").should be_true
     end
+  end
+end
+
+describe "require_rel" do
+  it "provides require_all functionality relative to the current file" do
+    require File.dirname(__FILE__) + '/fixtures/relative/b/b'
+    
+    defined?(RelativeA).should == "constant"
+    defined?(RelativeB).should == "constant"
+    defined?(RelativeC).should == "constant"
   end
 end
