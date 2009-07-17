@@ -117,7 +117,7 @@ module RequireAll
   # Works like require_all, but paths are relative to the caller rather than 
   # the current working directory
   def require_rel(path)
-    source_directory = File.dirname(caller.first.sub(/:\d+$/, ''))
+    source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     require_all File.join(source_directory, path)
   end
 end
