@@ -1,0 +1,2 @@
+class RelativeA
+end
