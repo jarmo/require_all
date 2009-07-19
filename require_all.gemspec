@@ -2,10 +2,10 @@ require 'rubygems'
 
 GEMSPEC = Gem::Specification.new do |s|
   s.name = "require_all"
-  s.version = "1.0.1"
+  s.version = "1.1.0"
   s.authors = "Tony Arcieri"
   s.email = "tony@medioh.com"
-  s.date = "2009-06-09"
+  s.date = "2009-07-18"
   s.summary = "A wonderfully simple way to load your code"
   s.platform = Gem::Platform::RUBY
 
