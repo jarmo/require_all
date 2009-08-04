@@ -33,7 +33,7 @@ module RequireAll
   #
   def require_all(*args)
     # Handle passing an array as an argument
-    args = args.flatten
+    args.flatten!
     
     if args.size > 1
       # If we got a list, those be are files!
@@ -116,9 +116,14 @@ module RequireAll
   
   # Works like require_all, but paths are relative to the caller rather than 
   # the current working directory
-  def require_rel(path)
+  def require_rel(*paths)
+    # Handle passing an array as an argument
+    paths.flatten!
+    
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
-    require_all File.join(source_directory, path)
+    paths.each do |path|
+      require_all File.join(source_directory, path)
+    end
   end
 end
 
