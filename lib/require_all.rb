@@ -65,6 +65,9 @@ module RequireAll
         raise LoadError, "no such file to load -- #{arg}" if files.empty?
       end
     end
+
+    # If there's nothing to load, you're doing it wrong!
+    raise LoadError, "no files to load" if files.empty?
     
     files.map! { |file| File.expand_path file }
             
