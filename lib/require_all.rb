@@ -70,6 +70,7 @@ module RequireAll
     raise LoadError, "no files to load" if files.empty?
     
     files.map! { |file| File.expand_path file }
+    files.sort!
             
     begin
       failed = []
