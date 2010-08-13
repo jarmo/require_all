@@ -43,6 +43,14 @@ describe "require_all" do
     it "will load all .rb files under a directory with a trailing slash" do
       require_all("#{@base_dir}/").should be_true
     end
+
+    it "doesn't throw any Exceptions if an empty Array was given as an input" do
+      lambda {require_all([])}.should_not raise_exception
+    end
+
+    it "returns false if an empty Array was given as an input" do
+      require_all([]).should be_false
+    end
   end
 end
 
