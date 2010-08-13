@@ -35,7 +35,8 @@ module RequireAll
     # Handle passing an array as an argument
     args.flatten!
 
-    loading_strategy = !args.last.is_a?(Symbol) ? :require : args.pop
+    options = {:method => :require}
+    options.merge!(construct_options(args))
 
     if args.empty?
       puts "no files were loaded due to an empty Array" if $DEBUG
@@ -71,7 +72,7 @@ module RequireAll
         # Maybe it's an .rb file and the .rb was omitted
         if File.file?(arg + '.rb')
           file = arg + '.rb'
-          loading_strategy != :autoload ? Kernel.send(loading_strategy, file) : __autoload(file, file)
+          options[:method] != :autoload ? Kernel.send(options[:method], file) : __autoload(file, file, options)
           return true
         end
 
@@ -83,10 +84,10 @@ module RequireAll
     # If there's nothing to load, you're doing it wrong!
     raise LoadError, "no files to load" if files.empty?
 
-    if loading_strategy == :autoload
+    if options[:method] == :autoload
       files.map! { |file| [file, File.expand_path(file)] }
       files.each do |file, full_path|
-        __autoload(file, full_path)
+        __autoload(file, full_path, options)
       end
 
       return true
@@ -105,7 +106,7 @@ module RequireAll
       # files can be loaded, indicating unresolvable dependencies.
       files.each do |file|
         begin
-          Kernel.send(loading_strategy, file)
+          Kernel.send(options[:method], file)
         rescue NameError => ex
           failed << file
           first_name_error ||= ex
@@ -154,7 +155,7 @@ module RequireAll
   end
 
   def load_all(*paths)
-    require_all paths << :load
+    require_all paths << {:method => :load}.merge(construct_options(paths))
   end
 
   def load_rel(*paths)
@@ -162,19 +163,27 @@ module RequireAll
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
-      require_all [File.join(source_directory, path)] << :load
+      require_all [File.join(source_directory, path)] << {:method => :load}.merge(construct_options(paths))
     end
   end
 
   def autoload_all(*paths)
     require "pathname"
-    require_all paths.map {|path| path.gsub(/^\.\//, '')} << :autoload
+    require_all paths << {:method => :autoload}.merge(construct_options(paths))
   end
 
-  def __autoload(file, full_path)
+  private
+
+  def construct_options args
+    opts = args.last.is_a?(Hash) ? args.pop : nil
+    opts || {}
+  end
+
+  def __autoload(file, full_path, options)
     last_module = "Object"
-    Pathname.new(file).descend do |entry|
-      mod = Object.class_eval last_module
+    Pathname.new(file).cleanpath.descend do |entry|
+      ns = options[:ns] ? create_namespace(options[:ns].call(entry.to_s)) : nil
+      mod = Object.class_eval(ns || last_module)
       without_ext = entry.basename(entry.extname).to_s
       const = without_ext.split("_").map {|word| word.capitalize}.join
       if entry.directory?
@@ -189,7 +198,18 @@ module RequireAll
     end
   end
 
-  private :__autoload
+  def create_namespace(ns)
+    return nil if ns.nil? || ns.empty?
+    return ns if Object.class_eval(ns) rescue nil
+    
+    last_module = "Object"
+    ns.split("::").each do |part|
+      mod = Object.class_eval(last_module)
+      mod.class_eval "module #{part} end"
+      last_module += "::#{part}"
+    end
+    ns
+  end
 end
 
 include RequireAll

@@ -51,6 +51,12 @@ describe "require_all" do
     it "returns false if an empty Array was given as an input" do
       require_all([]).should be_false
     end
+
+    it "accepts options hash as a last parameter" do
+      require_all(@base_dir, :method => :require).should be_true
+      require_all(@base_dir, :method => :load).should be_true
+      require_all(@base_dir, :method => :autoload).should be_true
+    end
   end
 end
 
@@ -102,15 +108,20 @@ end
 
 describe "autoload_all" do
   it "provides require_all functionality by using 'autoload' instead of 'require'" do
-    defined?(Spec::Fixtures::Autoloaded).should == nil
-    require "ruby-debug"; debugger
+    defined?(Spec::Fixtures::Autoloaded::Module1::A).should == nil
     autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded"
-    defined?(Spec::Fixtures::Autoloaded).should == 'constant'
     defined?(Spec::Fixtures::Autoloaded::Module1::A).should == 'constant'
     defined?(Spec::Fixtures::Autoloaded::Module2::LongerName).should == 'constant'
     defined?(Spec::Fixtures::Autoloaded::Module2::Module3::B).should == 'constant'
 
     defined?(Spec::Fixtures::Autoloaded::WrongModule::WithWrongModule).should == nil
     defined?(WrongModule::WithWrongModule).should == nil
+  end
+
+  it "provides possibility to define namespace for the loaded modules/classes with Proc" do
+    defined?(WrongModule::WithWrongModule).should == nil
+    autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded",
+                 :ns => proc {|f| "WrongModule" if f =~ /with_wrong_module/}
+    defined?(WrongModule::WithWrongModule).should == 'constant'
   end
 end
