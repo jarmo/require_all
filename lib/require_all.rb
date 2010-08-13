@@ -70,7 +70,8 @@ module RequireAll
 
         # Maybe it's an .rb file and the .rb was omitted
         if File.file?(arg + '.rb')
-          Kernel.send(loading_strategy, arg + '.rb')
+          file = arg + '.rb'
+          loading_strategy != :autoload ? Kernel.send(loading_strategy, file) : __autoload(file, file)
           return true
         end
 
@@ -81,6 +82,15 @@ module RequireAll
 
     # If there's nothing to load, you're doing it wrong!
     raise LoadError, "no files to load" if files.empty?
+
+    if loading_strategy == :autoload
+      files.map! { |file| [file, File.expand_path(file)] }
+      files.each do |file, full_path|
+        __autoload(file, full_path)
+      end
+
+      return true
+    end
 
     files.map! { |file| File.expand_path file }
     files.sort!
@@ -155,6 +165,31 @@ module RequireAll
       require_all [File.join(source_directory, path)] << :load
     end
   end
+
+  def autoload_all(*paths)
+    require "pathname"
+    require_all paths.map {|path| path.gsub(/^\.\//, '')} << :autoload
+  end
+
+  def __autoload(file, full_path)
+    last_module = "Object"
+    Pathname.new(file).descend do |entry|
+      mod = Object.class_eval last_module
+      without_ext = entry.basename(entry.extname).to_s
+      const = without_ext.split("_").map {|word| word.capitalize}.join
+      if entry.directory?
+        mod.class_eval "module #{const} end"
+        last_module += "::#{const}"
+      else
+        mod.class_eval do
+          puts "autoloading #{mod}::#{const} from #{full_path}" if $DEBUG
+          autoload const, full_path
+        end
+      end
+    end
+  end
+
+  private :__autoload
 end
 
 include RequireAll

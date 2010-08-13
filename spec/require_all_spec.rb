@@ -99,3 +99,18 @@ describe "load_rel" do
     RelativeD.new.should be_ok
   end
 end
+
+describe "autoload_all" do
+  it "provides require_all functionality by using 'autoload' instead of 'require'" do
+    defined?(Spec::Fixtures::Autoloaded).should == nil
+    require "ruby-debug"; debugger
+    autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded"
+    defined?(Spec::Fixtures::Autoloaded).should == 'constant'
+    defined?(Spec::Fixtures::Autoloaded::Module1::A).should == 'constant'
+    defined?(Spec::Fixtures::Autoloaded::Module2::LongerName).should == 'constant'
+    defined?(Spec::Fixtures::Autoloaded::Module2::Module3::B).should == 'constant'
+
+    defined?(Spec::Fixtures::Autoloaded::WrongModule::WithWrongModule).should == nil
+    defined?(WrongModule::WithWrongModule).should == nil
+  end
+end
