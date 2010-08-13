@@ -1,1 +1,5 @@
-class C; end
+class C
+  def cool?
+    true
+  end
+end

@@ -35,6 +35,8 @@ module RequireAll
     # Handle passing an array as an argument
     args.flatten!
 
+    loading_strategy = !args.last.is_a?(Symbol) ? :require : args.pop
+
     if args.empty?
       puts "no files were loaded due to an empty Array" if $DEBUG
       return false
@@ -68,7 +70,7 @@ module RequireAll
 
         # Maybe it's an .rb file and the .rb was omitted
         if File.file?(arg + '.rb')
-          require(arg + '.rb')
+          Kernel.send(loading_strategy, arg + '.rb')
           return true
         end
 
@@ -93,7 +95,7 @@ module RequireAll
       # files can be loaded, indicating unresolvable dependencies.
       files.each do |file|
         begin
-          require file
+          Kernel.send(loading_strategy, file)
         rescue NameError => ex
           failed << file
           first_name_error ||= ex
@@ -138,6 +140,19 @@ module RequireAll
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
       require_all File.join(source_directory, path)
+    end
+  end
+
+  def load_all(*paths)
+    require_all paths << :load
+  end
+
+  def load_rel(*paths)
+    paths.flatten!
+
+    source_directory = File.dirname caller.first.sub(/:\d+$/, '')
+    paths.each do |path|
+      require_all [File.join(source_directory, path)] << :load
     end
   end
 end
