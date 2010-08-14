@@ -220,7 +220,7 @@ module RequireAll
   private
 
   def __autoload(file, full_path, options)
-    last_module = "Kernel" # default module where namespaces are created into
+    last_module = "Object" # default constant where namespaces are created into
     load_path = Pathname.new(options[:load_path]).cleanpath
     Pathname.new(file).cleanpath.descend do |entry|
       # skip until *entry* is same as desired directory
