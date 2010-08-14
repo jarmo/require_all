@@ -17,7 +17,10 @@ describe "load_all" do
     C.new.should be_cool
   end
 
-  before(:all) {@method = :load_all}
+  before(:all) do
+    @base_dir = File.dirname(__FILE__) + '/fixtures/autoloaded'
+    @method = :load_all
+  end
   it_should_behave_like "#require_all syntactic sugar"
 end
 
@@ -25,9 +28,7 @@ describe "load_rel" do
   it "provides load_all functionality relative to the current file" do
     require File.dirname(__FILE__) + '/fixtures/relative/d/d'
 
-    defined?(RelativeA).should == "constant"
-    defined?(RelativeC).should == "constant"
-    defined?(RelativeD).should == "constant"
+    should be_loaded("RelativeA", "RelativeC", "RelativeD")
     RelativeD.new.should be_ok
 
     class RelativeD
@@ -40,4 +41,10 @@ describe "load_rel" do
     load File.dirname(__FILE__) + '/fixtures/relative/d/d.rb'
     RelativeD.new.should be_ok
   end
+
+  before(:all) do
+    @base_dir = './fixtures/autoloaded'
+    @method = :load_rel
+  end
+  it_should_behave_like "#require_all syntactic sugar"
 end

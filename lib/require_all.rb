@@ -147,6 +147,7 @@ module RequireAll
   def require_rel(*paths)
     # Handle passing an array as an argument
     paths.flatten!
+    return false if paths.empty?
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
@@ -163,6 +164,7 @@ module RequireAll
   # the current working directory
   def load_rel(*paths)
     paths.flatten!
+    return false if paths.empty?
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
@@ -207,8 +209,9 @@ module RequireAll
 
   # Performs autoloading relatively from the caller instead of using current working directory
   def autoload_rel(*paths)
-    require "pathname"
     paths.flatten!
+    return false if paths.empty?
+    require "pathname"
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|

@@ -6,10 +6,7 @@ describe "require_all" do
     it "handles load ordering when dependencies are resolvable" do
       require_all File.dirname(__FILE__) + '/fixtures/resolvable/*.rb'
 
-      defined?(A).should == "constant"
-      defined?(B).should == "constant"
-      defined?(C).should == "constant"
-      defined?(D).should == "constant"
+      should be_loaded("A", "B", "C", "D")
     end
 
     it "raises NameError if dependencies can't be resolved" do
@@ -19,7 +16,10 @@ describe "require_all" do
     end
   end
 
-  before(:all) {@method = :require_all}
+  before(:all) do
+    @base_dir = File.dirname(__FILE__) + '/fixtures/autoloaded'
+    @method = :require_all
+  end
   it_should_behave_like "#require_all syntactic sugar"
 end
 
@@ -27,8 +27,13 @@ describe "require_rel" do
   it "provides require_all functionality relative to the current file" do
     require File.dirname(__FILE__) + '/fixtures/relative/b/b'
 
-    defined?(RelativeA).should == "constant"
-    defined?(RelativeB).should == "constant"
-    defined?(RelativeC).should == "constant"
+    should be_loaded("RelativeA", "RelativeB", "RelativeC")
+    should_not be_loaded("RelativeD")
   end
+
+  before(:all) do
+    @base_dir = './fixtures/autoloaded'
+    @method = :require_rel
+  end
+  it_should_behave_like "#require_all syntactic sugar"
 end

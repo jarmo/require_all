@@ -1,8 +1,5 @@
 shared_examples_for "#require_all syntactic sugar" do
-  subject {self}
-
   before :each do
-    @base_dir = File.dirname(__FILE__) + '/fixtures/autoloaded'
     @file_list = [
             "#{@base_dir}/module1/a.rb",
             "#{@base_dir}/module2/longer_name.rb",

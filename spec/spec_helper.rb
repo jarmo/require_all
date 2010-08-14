@@ -21,3 +21,9 @@ Spec::Runner.configure do |config|
     unload_all
   end
 end
+
+module Spec
+  class ExampleGroup
+    subject {self}
+  end
+end
