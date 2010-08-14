@@ -45,7 +45,7 @@ describe "autoload_rel" do
     should_not be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
 
     autoload_rel "./fixtures/autoloaded/module1",
-                 :base_dir => "./spec/fixtures/autoloaded"
+                 :base_dir => File.dirname(__FILE__) + "/fixtures/autoloaded"
     should be_loaded("Autoloaded::Module1::A")
     should_not be_loaded("Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
   end
@@ -53,7 +53,7 @@ describe "autoload_rel" do
   before(:all) do
     @base_dir = './fixtures/autoloaded'
     @method = :autoload_rel
-    @autoload_base_dir = './spec/fixtures/autoloaded'
+    @autoload_base_dir = File.dirname(__FILE__) + "/fixtures/autoloaded"
   end
   it_should_behave_like "#autoload_all syntactic sugar"
 end

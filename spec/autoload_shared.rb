@@ -67,7 +67,12 @@ shared_examples_for "#autoload_all syntactic sugar" do
     send(@method).should be_false
   end
 
-  it "throws LoadError if no file or directory found" do
+  it "raises LoadError if no file or directory found" do
     lambda {send(@method, "not_found")}.should raise_error(LoadError)
+  end
+
+  it "raises LoadError if :base_dir doesn't exist" do
+    lambda {send(@method, @base_dir, :base_dir => @base_dir + "/non_existing_dir")}.
+            should raise_exception(LoadError)
   end
 end

@@ -157,7 +157,7 @@ module RequireAll
 
   # Loads all files like require_all instead of requiring
   def load_all(*paths)
-    require_all paths << {:method => :load}
+    require_all paths, :method => :load
   end
 
   # Loads all files by using relative paths of the caller rather than
@@ -168,7 +168,7 @@ module RequireAll
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
-      require_all [File.join(source_directory, path)] << {:method => :load}
+      require_all File.join(source_directory, path), :method => :load
     end
   end
 
@@ -206,7 +206,7 @@ module RequireAll
     options.merge!(paths.pop) if paths.last.is_a?(Hash)
 
     paths.each do |path|
-      require_all [path] << {:base_dir => path}.merge(options)
+      require_all path, {:base_dir => path}.merge(options)
     end
   end
 
@@ -222,8 +222,8 @@ module RequireAll
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
       file_path = Pathname.new(source_directory).join(path).to_s
-      require_all [file_path] << {:method => :autoload,
-                                  :base_dir => source_directory}.merge(options)
+      require_all file_path, {:method => :autoload,
+                              :base_dir => source_directory}.merge(options)
     end
   end
 
@@ -231,8 +231,12 @@ module RequireAll
 
   def __autoload(file, full_path, options)
     last_module = "Object" # default constant where namespaces are created into
-    base_dir = Pathname.new(options[:base_dir].downcase).cleanpath
-    Pathname.new(file.downcase).cleanpath.descend do |entry|
+    begin
+      base_dir = Pathname.new(options[:base_dir]).realpath
+    rescue Errno::ENOENT
+      raise LoadError, ":base_dir doesn't exist at #{options[:base_dir]}"
+    end
+    Pathname.new(file).realpath.descend do |entry|
       # skip until *entry* is same as desired directory
       # or anything inside of it avoiding to create modules
       # from the top-level directories
