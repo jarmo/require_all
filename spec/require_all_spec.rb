@@ -24,8 +24,9 @@ describe "require_all" do
       @file_list = ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| "#{@base_dir}/#{f}" }
     end
 
-    it "works like a drop-in require replacement" do
+    it "accepts files with and without extensions" do
       require_all(@base_dir + '/c').should be_true
+      require_all(@base_dir + '/a.rb').should be_true
     end
 
     it "accepts lists of files" do
@@ -44,12 +45,17 @@ describe "require_all" do
       require_all("#{@base_dir}/").should be_true
     end
 
-    it "doesn't throw any Exceptions if an empty Array was given as an input" do
-      lambda {require_all([])}.should_not raise_exception
+    it "will load all files specified by a glob" do
+      require_all("#{@base_dir}/**/*.rb").should be_true
     end
 
-    it "returns false if an empty Array was given as an input" do
+    it "returns false if an empty input was given" do
       require_all([]).should be_false
+      require_all.should be_false
+    end
+
+    it "throws LoadError if no file or directory found" do
+      lambda {require_all("not_found")}.should raise_error(LoadError)
     end
   end
 end
