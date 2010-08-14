@@ -36,7 +36,7 @@ module RequireAll
     args.flatten!
 
     options = {:method => :require}
-    options.merge!(construct_options(args))
+    options.merge!(args.pop) if args.last.is_a?(Hash)
 
     if args.empty?
       puts "no files were loaded due to an empty Array" if $DEBUG
@@ -154,38 +154,87 @@ module RequireAll
     end
   end
 
+  # Loads all files like require_all instead of requiring
   def load_all(*paths)
-    require_all paths << {:method => :load}.merge(construct_options(paths))
+    require_all paths << {:method => :load}
   end
 
+  # Loads all files by using relative paths of the caller rather than
+  # the current working directory
   def load_rel(*paths)
     paths.flatten!
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
-      require_all [File.join(source_directory, path)] << {:method => :load}.merge(construct_options(paths))
+      require_all [File.join(source_directory, path)] << {:method => :load}
     end
   end
 
+  # Performs autoloading on all of the files rather than requiring immediately.
+  #
+  # Note that all Ruby files inside of the given directories should have same module name as
+  # the directory itself and file names should reflect the class names.
+  # For example if there is a my_file.rb in directories dir1/dir2/ then
+  # there should be a declaration like this in my_file.rb:
+  #   module Dir1
+  #     module Dir2
+  #       class MyFile
+  #         ...
+  #       end
+  #     end
+  #  end
+  #
+  # If the filename and namespaces won't match then my_file.rb will be loaded into wrong module!
+  # Set $DEBUG=true to see how files will be autoloaded if having some problems.
+  #
+  # WARNING: All modules will be created even if files themselves aren't loaded yet, meaning
+  # that all code which depends of the modules being loaded or not will not work, like usages
+  # of define? and it's friends.
+  #
+  # Also, normal caveats of using Kernel#autoload apply - you have to remember that, before
+  # applying any monkey-patches to code using autoload, you'll have to reference the full constant
+  # to load the code before applying your patch!
+
   def autoload_all(*paths)
     require "pathname"
-    require_all paths << {:method => :autoload}.merge(construct_options(paths))
+    paths.flatten!
+
+    paths.each do |path|
+      require_all [path] << {:method => :autoload,
+                             :load_path => path}
+    end
+  end
+
+  # Performs autoloading relatively from the caller instead of using current working directory
+  def autoload_rel(*paths)
+    require "pathname"
+    paths.flatten!
+
+    source_directory = File.dirname caller.first.sub(/:\d+$/, '')
+    paths.each do |path|
+      require_all [File.join(source_directory, path)] << {:method => :autoload,
+                                                          :load_path => source_directory}
+    end
   end
 
   private
 
-  def construct_options args
-    opts = args.last.is_a?(Hash) ? args.pop : nil
-    opts || {}
-  end
-
   def __autoload(file, full_path, options)
-    last_module = "Object"
+    last_module = "Kernel" # default module where namespaces are created into
+    load_path = Pathname.new(options[:load_path]).cleanpath
     Pathname.new(file).cleanpath.descend do |entry|
-      ns = options[:ns] ? create_namespace(options[:ns].call(entry.to_s)) : nil
-      mod = Object.class_eval(ns || last_module)
+      # skip until *entry* is same as desired directory
+      # or anything inside of it avoiding to create modules
+      # from the top-level directories
+      next if (entry <=> load_path) < 0
+
+      # get the module into which a new module is created or
+      # autoload performed
+      mod = Object.class_eval(last_module)
+
       without_ext = entry.basename(entry.extname).to_s
       const = without_ext.split("_").map {|word| word.capitalize}.join
+
       if entry.directory?
         mod.class_eval "module #{const} end"
         last_module += "::#{const}"
@@ -198,18 +247,6 @@ module RequireAll
     end
   end
 
-  def create_namespace(ns)
-    return nil if ns.nil? || ns.empty?
-    return ns if Object.class_eval(ns) rescue nil
-    
-    last_module = "Object"
-    ns.split("::").each do |part|
-      mod = Object.class_eval(last_module)
-      mod.class_eval "module #{part} end"
-      last_module += "::#{part}"
-    end
-    ns
-  end
 end
 
 include RequireAll
