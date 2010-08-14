@@ -1,5 +1,46 @@
 require File.dirname(__FILE__) + '/../lib/require_all.rb'
 
+shared_examples_for "syntactic sugar" do
+  before :each do
+    @base_dir = File.dirname(__FILE__) + '/fixtures/resolvable'
+    @file_list = ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| "#{@base_dir}/#{f}" }
+  end
+
+  it "accepts files with and without extensions" do
+    require_all(@base_dir + '/c').should be_true
+    require_all(@base_dir + '/a.rb').should be_true
+  end
+
+  it "accepts lists of files" do
+    require_all(@file_list).should be_true
+  end
+
+  it "is totally cool with a splatted list of arguments" do
+    require_all(*@file_list).should be_true
+  end
+
+  it "will load all .rb files under a directory without a trailing slash" do
+    require_all(@base_dir).should be_true
+  end
+
+  it "will load all .rb files under a directory with a trailing slash" do
+    require_all("#{@base_dir}/").should be_true
+  end
+
+  it "will load all files specified by a glob" do
+    require_all("#{@base_dir}/**/*.rb").should be_true
+  end
+
+  it "returns false if an empty input was given" do
+    require_all([]).should be_false
+    require_all.should be_false
+  end
+
+  it "throws LoadError if no file or directory found" do
+    lambda {require_all("not_found")}.should raise_error(LoadError)
+  end
+end
+
 describe "require_all" do
   describe "dependency resolution" do
     it "handles load ordering when dependencies are resolvable" do
@@ -18,46 +59,7 @@ describe "require_all" do
     end
   end
 
-  describe "syntactic sugar" do
-    before :each do
-      @base_dir = File.dirname(__FILE__) + '/fixtures/resolvable'
-      @file_list = ['b.rb', 'c.rb', 'a.rb', 'd.rb'].map { |f| "#{@base_dir}/#{f}" }
-    end
-
-    it "accepts files with and without extensions" do
-      require_all(@base_dir + '/c').should be_true
-      require_all(@base_dir + '/a.rb').should be_true
-    end
-
-    it "accepts lists of files" do
-      require_all(@file_list).should be_true
-    end
-
-    it "is totally cool with a splatted list of arguments" do
-      require_all(*@file_list).should be_true
-    end
-
-    it "will load all .rb files under a directory without a trailing slash" do
-      require_all(@base_dir).should be_true
-    end
-
-    it "will load all .rb files under a directory with a trailing slash" do
-      require_all("#{@base_dir}/").should be_true
-    end
-
-    it "will load all files specified by a glob" do
-      require_all("#{@base_dir}/**/*.rb").should be_true
-    end
-
-    it "returns false if an empty input was given" do
-      require_all([]).should be_false
-      require_all.should be_false
-    end
-
-    it "throws LoadError if no file or directory found" do
-      lambda {require_all("not_found")}.should raise_error(LoadError)
-    end
-  end
+  it_should_behave_like "syntactic sugar"
 end
 
 describe "require_rel" do
