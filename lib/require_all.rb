@@ -198,12 +198,15 @@ module RequireAll
   # to load the code before applying your patch!
 
   def autoload_all(*paths)
-    require "pathname"
     paths.flatten!
+    return false if paths.empty?
+    require "pathname"
+
+    options = {:method => :autoload}
+    options.merge!(paths.pop) if paths.last.is_a?(Hash)
 
     paths.each do |path|
-      require_all [path] << {:method => :autoload,
-                             :load_path => path}
+      require_all [path] << {:base_dir => path}.merge(options)
     end
   end
 
@@ -213,10 +216,14 @@ module RequireAll
     return false if paths.empty?
     require "pathname"
 
+    options = {:method => :autoload}
+    options.merge!(paths.pop) if paths.last.is_a?(Hash)
+
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
-      require_all [File.join(source_directory, path)] << {:method => :autoload,
-                                                          :load_path => source_directory}
+      file_path = Pathname.new(source_directory).join(path).to_s
+      require_all [file_path] << {:method => :autoload,
+                                  :base_dir => source_directory}.merge(options)
     end
   end
 
@@ -224,12 +231,12 @@ module RequireAll
 
   def __autoload(file, full_path, options)
     last_module = "Object" # default constant where namespaces are created into
-    load_path = Pathname.new(options[:load_path]).cleanpath
-    Pathname.new(file).cleanpath.descend do |entry|
+    base_dir = Pathname.new(options[:base_dir].downcase).cleanpath
+    Pathname.new(file.downcase).cleanpath.descend do |entry|
       # skip until *entry* is same as desired directory
       # or anything inside of it avoiding to create modules
       # from the top-level directories
-      next if (entry <=> load_path) < 0
+      next if (entry <=> base_dir) < 0
 
       # get the module into which a new module is created or
       # autoload performed
