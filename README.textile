@@ -64,7 +64,7 @@ kept in mind:
 
 * Directory and file names have to reflect namespaces and/or constant names - e.g.
   a file called my_file.rb in directories dir1/dir2 has to be defined like this:
-    ```ruby
+ <code>
       module Dir1
         module Dir2
           class MyFile
@@ -75,15 +75,15 @@ kept in mind:
 
       # in a loader.rb, which is in a parent directory for dir1:
       autoload_all File.dirname(__FILE__) + "/dir1"
-    ```
+ </code>
 
 * A :base_dir option has to be specified if loading directories or files from some other location
   than top-level directory:
-    ```ruby
+ <code>
      # in dir1/other_file.rb
      autoload_all File.dirname(__FILE__) + "/dir2/my_file.rb",
                   :base_dir => File.dirname(__FILE__) + "/../dir1" # top-level namespace starts from dir1
-    ```
+ </code>
 
 * All namespaces will be created dynamically by autoload_all - this means that defined?(Dir1) will
   return "constant" even if my_file.rb is not loaded!
