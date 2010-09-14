@@ -76,7 +76,7 @@ kept in mind:
  </pre>
 
  in a loader.rb, which is in a parent directory for dir1:
- <code>autoload_all File.dirname(__FILE__) + "/dir1"</code>
+  <code>autoload_all File.dirname(__FILE__) + "/dir1"</code>
 
 * A :base_dir option has to be specified if loading directories or files from some other location
   than top-level directory.
