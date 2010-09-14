@@ -1,3 +1,10 @@
+1.2.0:
+
+* Add load_all, and load_rel which behave similarly to require_all/require_rel except that Kernel#load is used
+* Add autoload_all and autoload_rel (see README and/or specs for examples of usage)
+* Minor bug fixes
+* Improved specs
+
 1.1.0:
 
 * Add require_rel (require_all relative to the current file)

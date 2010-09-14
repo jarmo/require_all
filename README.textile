@@ -51,8 +51,48 @@ Even better, require_rel still has the full power of require_all, so you can
 use require_rel to load entire directories of code too.  If "foobar" is a
 directory this will load all the .rb files found under that directory with
 automagic dependency handling.
+
+Also load_all and load_rel methods exist to use Kernel#load instead of Kernel#require!
  
 It's just that easy!  Code loading shouldn't be hard.
+
+h2. autoload_all
+
+There's also a methods for performing autoloading - what a bargain!
+Similar syntax is used as for require and load methods although some things have to be
+kept in mind:
+
+* Directory and file names have to reflect namespaces and/or constant names - e.g.
+  a file called my_file.rb in directories dir1/dir2 has to be defined like this:
+    <code>
+      module Dir1
+        module Dir2
+          class MyFile
+            # ...
+          end
+        end
+      end
+
+      # in a loader.rb, which is in a parent directory for dir1:
+      autoload_all File.dirname(__FILE__) + "/dir1"
+    </code>
+
+* A :base_dir option has to be specified if loading directories or files from some other location
+  than top-level directory:
+    <code>
+     # in dir1/other_file.rb
+     autoload_all File.dirname(__FILE__) + "/dir2/my_file.rb",
+                  :base_dir => File.dirname(__FILE__) + "/../dir1" # top-level namespace starts from dir1
+    </code>
+
+* All namespaces will be created dynamically by autoload_all - this means that defined?(Dir1) will
+  return "constant" even if my_file.rb is not loaded!
+
+Of course there's also an autoload_rel method:
+ <code>autoload_rel "dir2/my_file.rb", :base_dir => File.dirname(__FILE__) + "/../dir1"</code>
+
+If having some problems with autoload_all or autoload_rel then set $DEBUG to true to see how files
+are mapped to their respective modules and classes.
 
 h2. Methodology
 
@@ -70,14 +110,16 @@ Merb (which apparently stole it from elsewhere).  Here's how it works:
 
 h2. Questions? Comments? Concerns?
 
-You can reach the author on github or freenode: "tarcieri"
+You can reach the author on github or freenode: "jarm0"
 
-Or by email: "tony@medioh.com":mailto:tony@medioh.com
+Or by email: "jarmo.p@gmail.com":mailto:jarmo.p@gmail.com
 
-Got issues with require_all to report?  Post 'em here:
+Got issues with require_all to report? Post 'em here:
 
-"Github Tracker":http://github.com/tarcieri/require_all/issues
+"Github Tracker":http://github.com/jarmo/require_all/issues
 
 h2. License
+
+require_all was done originally by Tony Arcieri who asked me to maintain the gem.
 
 MIT (see the LICENSE file for details)

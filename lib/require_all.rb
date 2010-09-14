@@ -175,7 +175,7 @@ module RequireAll
   # Performs Kernel#autoload on all of the files rather than requiring immediately.
   #
   # Note that all Ruby files inside of the specified directories should have same module name as
-  # the directory itself and file names should reflect the class names.
+  # the directory itself and file names should reflect the class/module names.
   # For example if there is a my_file.rb in directories dir1/dir2/ then
   # there should be a declaration like this in my_file.rb:
   #   module Dir1
@@ -189,7 +189,7 @@ module RequireAll
   # If the filename and namespaces won't match then my_file.rb will be loaded into wrong module!
   # Better to fix these files.
   #
-  # Set $DEBUG=true to see how files will be autoloaded if experiencing problems.
+  # Set $DEBUG=true to see how files will be autoloaded if experiencing any problems.
   #
   # If trying to perform autoload on some individual file or some inner module, then you'd have
   # to always specify *:base_dir* option to specify where top-level namespace resides.
@@ -201,7 +201,7 @@ module RequireAll
   #                :base_dir => File.dirname(__FILE__) + '/dir1'
   #
   # WARNING: All modules will be created even if files themselves aren't loaded yet, meaning
-  # that all code which depends of the modules being loaded or not will not work, like usages
+  # that all the code which depends of the modules being loaded or not will not work, like usages
   # of define? and it's friends.
   #
   # Also, normal caveats of using Kernel#autoload apply - you have to remember that before
