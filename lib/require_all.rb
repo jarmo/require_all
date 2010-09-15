@@ -65,7 +65,7 @@ module RequireAll
         else
           raise ArgumentError, "#{arg} isn't a file or directory"
         end
-      rescue Errno::ENOENT
+      rescue SystemCallError
         # If the stat failed, maybe we have a glob!
         files = Dir.glob arg
 
