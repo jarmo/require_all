@@ -52,6 +52,17 @@ use require_rel to load entire directories of code too.  If "foobar" is a
 directory this will load all the .rb files found under that directory with
 automagic dependency handling.
 
+The difference between <code>require_all</code> and <code>require_rel</code> is that the former loads from the
+working directory and latter from the directory relative to the <code>__FILE__</code>.
+So, if your working directory is let's say /home, and there is /lib/a/b.rb and /lib/c.rb, then
+
+<code>require_all "lib/"</code> loads every ruby file from the lib directory in the working directory (pwd)
+
+and in /lib/c.rb <code>require_rel "a/"</code> loads every ruby file from the a/ directory not paying any attention
+to the working directory itself.
+
+It's recommended to use require_rel since it is not affected by the working directory.
+
 Also load_all and load_rel methods exist to use Kernel#load instead of Kernel#require!
  
 It's just that easy!  Code loading shouldn't be hard.
@@ -98,7 +109,7 @@ Of course there's also an autoload_rel method:
 If having some problems with autoload_all or autoload_rel then set $DEBUG to true to see how files
 are mapped to their respective modules and classes.
 
-h2. Methodology
+h2. Methodology (except for autoload_{all|rel})
 
 I didn't invent the approach this gem uses.  It was shamelessly stolen from
 Merb (which apparently stole it from elsewhere).  Here's how it works:  
