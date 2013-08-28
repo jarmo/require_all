@@ -14,7 +14,7 @@ module SpecHelper
   end
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.include(SpecHelper)
 
   config.before(:each) do
@@ -24,6 +24,5 @@ end
 
 module Spec
   class ExampleGroup
-    subject {self}
   end
 end
