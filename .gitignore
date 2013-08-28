@@ -1,2 +1,5 @@
 pkg
 coverage/
+.ruby-version
+.ruby-gemset
+.rspec
