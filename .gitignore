@@ -3,3 +3,4 @@ coverage/
 .ruby-version
 .ruby-gemset
 .rspec
+Gemfile.lock
