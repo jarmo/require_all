@@ -37,7 +37,7 @@ Or if you want, just list the files directly as arguments:
 
  <code>require_all 'lib/a.rb', 'lib/b.rb', 'lib/c.rb', 'lib/d.rb'</code>
 
-Still have the require File.dirname(__FILE__) blues?  The require_all gem also
+Still have the require <code>File.dirname(__FILE__)</code> blues?  The require_all gem also
 provides a require_rel statement which requires files to relative to the 
 current file.  So you can replace statements like:
 
