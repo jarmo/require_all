@@ -20,5 +20,6 @@ GEMSPEC = Gem::Specification.new do |s|
   s.rdoc_options = %w(--title require_all --main README.textile --line-numbers)
   s.extra_rdoc_files = ["LICENSE", "README.textile", "CHANGES"]
 
+  s.add_development_dependency "rake",  "~>0.9"
   s.add_development_dependency "rspec", "~>2.14"
 end
