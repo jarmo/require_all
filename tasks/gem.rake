@@ -1,6 +1,5 @@
-require 'rake/gempackagetask'
-load File.dirname(__FILE__) + '/../require_all.gemspec'
+require 'rubygems/package_task'
 
-Rake::GemPackageTask.new(GEMSPEC) do |pkg|
+Gem::PackageTask.new(GEMSPEC) do |pkg|
   pkg.need_tar = true
 end
