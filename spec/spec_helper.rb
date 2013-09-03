@@ -1,3 +1,8 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter "/spec/"
+end
+
 require File.dirname(__FILE__) + '/../lib/require_all.rb'
 
 module SpecHelper

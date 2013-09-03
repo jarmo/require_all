@@ -22,4 +22,5 @@ GEMSPEC = Gem::Specification.new do |s|
 
   s.add_development_dependency "rake",  "~>0.9"
   s.add_development_dependency "rspec", "~>2.14"
+  s.add_development_dependency "simplecov", "~>0.7"
 end
