@@ -2,6 +2,9 @@ require File.dirname(__FILE__) + '/spec_helper.rb'
 require File.dirname(__FILE__) + '/require_shared.rb'
 
 describe "require_all" do
+
+  subject { self }
+
   describe "dependency resolution" do
     it "handles load ordering when dependencies are resolvable" do
       require_all File.dirname(__FILE__) + '/fixtures/resolvable/*.rb'
@@ -24,6 +27,9 @@ describe "require_all" do
 end
 
 describe "require_rel" do
+
+  subject { self }
+
   it "provides require_all functionality relative to the current file" do
     require File.dirname(__FILE__) + '/fixtures/relative/b/b'
 

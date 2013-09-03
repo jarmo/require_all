@@ -1,7 +1,3 @@
-# difference between "#require_all syntactic sugar" is the
-# need to specify :base_dir if performing autoloading below the top-level
-# module directory
-
 shared_examples_for "#autoload_all syntactic sugar" do
   before :each do
     @file_list = [

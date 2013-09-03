@@ -1,3 +1,7 @@
+1.3.0:
+
+* Make everything work with Ruby 1.9 and 2.0. Awesome! Thanks to Aaron Klaassen.
+
 1.2.0:
 
 * Add load_all, and load_rel which behave similarly to require_all/require_rel except that Kernel#load is used

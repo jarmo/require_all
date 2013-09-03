@@ -1,11 +1,9 @@
 require File.dirname(__FILE__) + '/spec_helper.rb'
 require File.dirname(__FILE__) + '/autoload_shared.rb'
 
-include SpecHelper
-
 describe "autoload_all" do
 
-  subject { Spec::ExampleGroup.new }
+  subject { self }
   
   it "provides require_all functionality by using 'autoload' instead of 'require'" do
     should_not be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
@@ -38,6 +36,9 @@ describe "autoload_all" do
 end
 
 describe "autoload_rel" do
+
+  subject { self }
+
   it "provides autoload_all functionality relative to the current file" do
     should_not be_loaded("Modules::Module1::First", "Modules::Module2::Second", "Modules::Zero")
     require File.dirname(__FILE__) + '/fixtures/autoloaded_rel/modules/zero'

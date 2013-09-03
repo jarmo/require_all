@@ -21,13 +21,9 @@ end
 
 RSpec.configure do |config|
   config.include(SpecHelper)
+  config.color = true
 
   config.before(:each) do
     unload_all
-  end
-end
-
-module Spec
-  class ExampleGroup
   end
 end

@@ -1,12 +1,7 @@
-require 'rake'
-require 'rake/clean'
+require "bundler/gem_tasks"
 
-Dir['tasks/**/*.rake'].each { |task| load task }
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
-
-task :clean do
-  %w[pkg coverage].each do |dir|
-    rm_rf dir
-  end
-end
+task :release => :spec
