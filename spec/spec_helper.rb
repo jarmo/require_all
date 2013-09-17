@@ -1,7 +1,8 @@
-require 'simplecov'
-SimpleCov.start do
-  add_filter "/spec/"
-end
+require "simplecov"
+require "coveralls"
+
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.start 
 
 require File.dirname(__FILE__) + '/../lib/require_all.rb'
 
@@ -20,10 +21,10 @@ module SpecHelper
 end
 
 RSpec.configure do |config|
-  config.include(SpecHelper)
+  config.include SpecHelper
   config.color = true
 
-  config.before(:each) do
+  config.before do
     unload_all
   end
 end
