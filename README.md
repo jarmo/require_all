@@ -1,4 +1,6 @@
 # require_all
+[![Gem Version](https://badge.fury.io/rb/require_all.png)](http://badge.fury.io/rb/require_all)
+[![Build Status](https://secure.travis-ci.org/jarmo/require_all.png)](http://travis-ci.org/jarmo/require_all)
 
 A wonderfully simple way to load your code.
 
