@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "require_all"
-  s.version = "1.3.0"
+  s.version = "1.3.1"
   s.authors = ["Jarmo Pertman", "Tony Arcieri"]
   s.email = "jarmo.p@gmail.com"
   s.summary = "A wonderfully simple way to load your code"
