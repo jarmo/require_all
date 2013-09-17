@@ -1,140 +1,127 @@
-h1. require_all
+# require_all
+[![Gem Version](https://badge.fury.io/rb/require_all.png)](http://badge.fury.io/rb/require_all)
+[![Build Status](https://secure.travis-ci.org/jarmo/require_all.png)](http://travis-ci.org/jarmo/require_all)
 
 A wonderfully simple way to load your code.
 
-Tired of futzing around with require statements everywhere, littering your code
-with <code>require File.dirname(__FILE__)</code> crap?  What if you could just 
+Tired of futzing around with `require` statements everywhere, littering your code
+with `require File.dirname(__FILE__)` crap?  What if you could just 
 point something at a big directory full of code and have everything just 
 automagically load regardless of the dependency structure?  
 
 Wouldn't that be nice?  Well, now you can!
 
- <code>require 'require_all'</code>
+## Installation
 
-You can use require_all in a multitude of different ways.
+Add this line to your application's Gemfile:
 
-The easiest way to use require_all is to just point it at a directory
-containing a bunch of .rb files:
+    gem 'require_all'
 
- <code>require_all 'lib'</code>
+And then execute:
 
-This will find all the .rb files under the lib directory (including all 
-subdirectories as well) and load them.
+    $ bundle
 
-The proper order to in which to load them is determined automatically.  If the 
-dependencies between the matched files are unresolvable, it will throw the 
-first unresolvable NameError.
+Or install it yourself as:
 
-You can also give it a glob, which will enumerate all the matching files: 
+    $ gem install require_all
 
- <code>require_all 'lib/**/*.rb'</code>
+## Usage
 
-It will also accept an array of files:
+```ruby
+require 'require_all'
 
- <code>require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file? f }</code>
- 
-Or if you want, just list the files directly as arguments:
+# load all ruby files in the directory "lib" and its subdirectories
+require_all 'lib'
 
- <code>require_all 'lib/a.rb', 'lib/b.rb', 'lib/c.rb', 'lib/d.rb'</code>
+# or load all files by using glob
+require_all 'lib/**/*.rb'
 
-Still have the require <code>File.dirname(__FILE__)</code> blues?  The require_all gem also
-provides a require_rel statement which requires files to relative to the 
-current file.  So you can replace statements like:
+# or load files in an Array
+require_all Dir.glob("blah/**/*.rb").reject { |f| stupid_file? f }
 
- <code>require File.dirname(__FILE__) + '/foobar'</code>
+# or load manually specified files
+require_all 'lib/a.rb', 'lib/b.rb', 'lib/c.rb', 'lib/d.rb'
+```
 
-with just a simple require_rel:
+You can also load files relative to the current file by using `require_rel`:
 
- <code>require_rel 'foobar'</code>
- 
-Even better, require_rel still has the full power of require_all, so you can
-use require_rel to load entire directories of code too.  If "foobar" is a
-directory this will load all the .rb files found under that directory with
-automagic dependency handling.
+```ruby
+# Instead of
+require File.dirname(__FILE__) + '/foobar'
 
-The difference between <code>require_all</code> and <code>require_rel</code> is that the former loads from the
-working directory and latter from the directory relative to the <code>__FILE__</code>.
-So, if your working directory is let's say /home, and there is /lib/a/b.rb and /lib/c.rb, then
+# you can do simply like this
+require_rel 'foobar'
+```
 
-<code>require_all "lib/"</code> loads every ruby file from the lib directory in the working directory (pwd)
+You can give all the same argument types to the `require_rel` as for `require_all`.
 
-and in /lib/c.rb <code>require_rel "a/"</code> loads every ruby file from the a/ directory not paying any attention
-to the working directory itself.
+It is recommended to use `require_rel` instead of `require_all` since it will require files relatively
+to the current file (`__FILE__`) as opposed to loading files relative from the working directory.
 
-It's recommended to use require_rel since it is not affected by the working directory.
+`load_all` and `load_rel` methods also exist to use `Kernel#load` instead of `Kernel#require`!
 
-Also load_all and load_rel methods exist to use Kernel#load instead of Kernel#require!
+The proper order to in which to load files is determined automatically for you.
  
 It's just that easy!  Code loading shouldn't be hard.
 
-h2. autoload_all
+## autoload_all
 
-There's also a methods for performing autoloading - what a bargain!
-Similar syntax is used as for require and load methods although some things have to be
-kept in mind:
+This library also includes methods for performing `autoload` - what a bargain!
 
-* Directory and file names have to reflect namespaces and/or constant names - e.g.
-  a file called my_file.rb in directories dir1/dir2 has to be defined like this:
- <pre>
- <code>
-  module Dir1
-    module Dir2
-      class MyFile
-      end
+Similar syntax is used as for `require_(all|rel)` and `load_(all|rel)` methods with some caveats:
+
+* Directory and file names have to reflect namespaces and/or constant names:
+
+```ruby
+# lib/dir1/dir2/my_file.rb
+module Dir1
+  module Dir2
+    class MyFile
     end
   end
- </code>
- </pre>
+end
 
- in a loader.rb, which is in a parent directory for dir1:
-  <code>autoload_all File.dirname(__FILE__) + "/dir1"</code>
+# lib/loader.rb
+autoload_all File.dirname(__FILE__) + "/dir1"
+```
 
-* A :base_dir option has to be specified if loading directories or files from some other location
-  than top-level directory.
+* A `base_dir` option has to be specified if loading directories or files from some other location
+  than top-level directory:
 
-  in dir1/other_file.rb:
- <pre>
- <code>
-  autoload_all File.dirname(__FILE__) + "/dir2/my_file.rb",
-               :base_dir => File.dirname(__FILE__) + "/../dir1" # top-level namespace starts from dir1
- </code>
- </pre>
+```ruby
+# lib/dir1/other_file.rb
+autoload_all File.dirname(__FILE__) + "/dir2/my_file.rb",
+             :base_dir => File.dirname(__FILE__) + "/../dir1"
+```
+  
+* All namespaces will be created dynamically by `autoload_all` - this means that `defined?(Dir1)` will
+  return `"constant"` even if `my_file.rb` is not yet loaded!
 
-* All namespaces will be created dynamically by autoload_all - this means that defined?(Dir1) will
-  return "constant" even if my_file.rb is not loaded!
+Of course there's also an `autoload_rel` method:
+```ruby
+autoload_rel "dir2/my_file.rb", :base_dir => File.dirname(__FILE__) + "/../dir1"
+```
 
-Of course there's also an autoload_rel method:
- <code>autoload_rel "dir2/my_file.rb", :base_dir => File.dirname(__FILE__) + "/../dir1"</code>
-
-If having some problems with autoload_all or autoload_rel then set $DEBUG to true to see how files
+If having some problems with `autoload_all` or `autoload_rel` then set `$DEBUG=true` to see how files
 are mapped to their respective modules and classes.
 
-h2. Methodology (except for autoload_{all|rel})
+## Methodology (except for autoload_{all|rel})
 
-I didn't invent the approach this gem uses.  It was shamelessly stolen from
-Merb (which apparently stole it from elsewhere).  Here's how it works:  
-
-# Enumerate the files to be loaded
-# Try to load all of the files.  If we encounter a NameError loading a 
+* Enumerate the files to be loaded
+* Try to load all of the files.  If we encounter a `NameError` loading a 
   particular file, store that file in a "try to load it later" list.
-# If all the files loaded, great, we're done!  If not, go through the
-  "try to load it later" list again rescuing NameErrors the same way.
-# If we walk the whole "try to load it later" list and it doesn't shrink
+* If all the files loaded, great, we're done! If not, go through the
+  "try to load it later" list again rescuing `NameError` the same way.
+* If we walk the whole "try to load it later" list and it doesn't shrink
   at all, we've encountered an unresolvable dependency.  In this case,
-  require_all will rethrow the first NameError it encountered.
+  `require_all` will rethrow the first `NameError` it encountered.
 
-h2. Questions? Comments? Concerns?
+## Questions? Comments? Concerns?
 
-You can reach the author on github or freenode: "jarm0"
+You can reach the author on github or by email [jarmo.p@gmail.com](mailto:jarmo.p@gmail.com)
 
-Or by email: "jarmo.p@gmail.com":mailto:jarmo.p@gmail.com
+## License
 
-Got issues with require_all to report? Post 'em here:
-
-"Github Tracker":http://github.com/jarmo/require_all/issues
-
-h2. License
-
-require_all was done originally by Tony Arcieri who asked me to maintain the gem.
+Jarmo Pertman
 
 MIT (see the LICENSE file for details)
