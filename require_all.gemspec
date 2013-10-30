@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "require_all"
-  s.version = "1.3.1"
+  s.version = "1.3.2"
   s.authors = ["Jarmo Pertman", "Tony Arcieri"]
   s.email = "jarmo.p@gmail.com"
   s.summary = "A wonderfully simple way to load your code"
@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.homepage = "http://github.com/jarmo/require_all"
+  s.license = "MIT" 
 
   s.has_rdoc = true
   s.rdoc_options = %w(--title require_all --main README.md --line-numbers)
