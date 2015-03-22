@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["LICENSE", "README.md", "CHANGES"]
 
   s.add_development_dependency "rake",  "~> 10.4"
-  s.add_development_dependency "rspec", "~> 2.99"
+  s.add_development_dependency "rspec", "~> 3.2"
   s.add_development_dependency "simplecov", "~> 0.7"
 end
