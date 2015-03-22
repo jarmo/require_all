@@ -10,11 +10,13 @@ describe "load_all" do
     expect(C.new).to be_cool
 
     class C
+      remove_method :cool?
       def cool?
         false
       end
     end
     expect(C.new).not_to be_cool
+    C.send :remove_method, :cool?
 
     load_all File.dirname(__FILE__) + '/fixtures/resolvable'
     expect(C.new).to be_cool
@@ -38,11 +40,13 @@ describe "load_rel" do
     expect(RelativeD.new).to be_ok
 
     class RelativeD
+      remove_method :ok?
       def ok?
         false
       end
     end
     expect(RelativeD.new).not_to be_ok
+    RelativeD.send :remove_method, :ok?
 
     load File.dirname(__FILE__) + '/fixtures/relative/d/d.rb'
     expect(RelativeD.new).to be_ok
