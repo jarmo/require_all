@@ -85,15 +85,15 @@ module RequireAll
     raise LoadError, "no files to load" if files.empty?
 
     if options[:method] == :autoload
-      files.map! { |file| [file, File.expand_path(file)] }
-      files.each do |file, full_path|
-        __autoload(file, full_path, options)
+      files.map! { |file_| [file_, File.expand_path(file_)] }
+      files.each do |file_, full_path|
+        __autoload(file_, full_path, options)
       end
 
       return true
     end
 
-    files.map! { |file| File.expand_path file }
+    files.map! { |file_| File.expand_path file_ }
     files.sort!
 
     begin
@@ -104,11 +104,11 @@ module RequireAll
       # undefined constants.  Keep trying to successively reload files that 
       # previously caused NameErrors until they've all been loaded or no new
       # files can be loaded, indicating unresolvable dependencies.
-      files.each do |file|
+      files.each do |file_|
         begin
-          Kernel.send(options[:method], file)
+          Kernel.send(options[:method], file_)
         rescue NameError => ex
-          failed << file
+          failed << file_
           first_name_error ||= ex
         rescue ArgumentError => ex
           # Work around ActiveSuport freaking out... *sigh*

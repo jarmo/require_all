@@ -6,25 +6,25 @@ describe "autoload_all" do
   subject { self }
   
   it "provides require_all functionality by using 'autoload' instead of 'require'" do
-    should_not be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
     autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded"
-    should be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
   end
 
   it "doesn't autoload files with wrong module names" do
     autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded"
-    should_not be_loaded("Autoloaded::WrongModule::WithWrongModule", "WrongModule::WithWrongModule")
+    is_expected.not_to be_loaded("Autoloaded::WrongModule::WithWrongModule", "WrongModule::WithWrongModule")
   end
 
   it "needs to specify base_dir for autoloading if loading something from under top-level module directory" do
-    should_not be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
     autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded/module1"
-    should_not be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
 
     autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded/module1",
                  :base_dir => File.dirname(__FILE__) + "/fixtures/autoloaded"
-    should be_loaded("Autoloaded::Module1::A")
-    should_not be_loaded("Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.to be_loaded("Autoloaded::Module1::A")
+    is_expected.not_to be_loaded("Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
   end
 
   before(:all) do
@@ -40,20 +40,20 @@ describe "autoload_rel" do
   subject { self }
 
   it "provides autoload_all functionality relative to the current file" do
-    should_not be_loaded("Modules::Module1::First", "Modules::Module2::Second", "Modules::Zero")
+    is_expected.not_to be_loaded("Modules::Module1::First", "Modules::Module2::Second", "Modules::Zero")
     require File.dirname(__FILE__) + '/fixtures/autoloaded_rel/modules/zero'
-    should be_loaded("Modules::Module1::First", "Modules::Module2::Second", "Modules::Zero")
+    is_expected.to be_loaded("Modules::Module1::First", "Modules::Module2::Second", "Modules::Zero")
   end
 
   it "needs to specify base_dir for autoloading if loading something from under top-level module directory" do
-    should_not be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
     autoload_rel "./fixtures/autoloaded/module1"
-    should_not be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
 
     autoload_rel "./fixtures/autoloaded/module1",
                  :base_dir => File.dirname(__FILE__) + "/fixtures/autoloaded"
-    should be_loaded("Autoloaded::Module1::A")
-    should_not be_loaded("Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
+    is_expected.to be_loaded("Autoloaded::Module1::A")
+    is_expected.not_to be_loaded("Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
   end
 
   before(:all) do
