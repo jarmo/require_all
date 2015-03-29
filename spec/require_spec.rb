@@ -9,13 +9,13 @@ describe "require_all" do
     it "handles load ordering when dependencies are resolvable" do
       require_all File.dirname(__FILE__) + '/fixtures/resolvable/*.rb'
 
-      should be_loaded("A", "B", "C", "D")
+      is_expected.to be_loaded("A", "B", "C", "D")
     end
 
     it "raises NameError if dependencies can't be resolved" do
-      proc do
+      expect do
         require_all File.dirname(__FILE__) + '/fixtures/unresolvable/*.rb'
-      end.should raise_error(NameError)
+      end.to raise_error(NameError)
     end
   end
 
@@ -33,8 +33,8 @@ describe "require_rel" do
   it "provides require_all functionality relative to the current file" do
     require File.dirname(__FILE__) + '/fixtures/relative/b/b'
 
-    should be_loaded("RelativeA", "RelativeB", "RelativeC")
-    should_not be_loaded("RelativeD")
+    is_expected.to be_loaded("RelativeA", "RelativeB", "RelativeC")
+    is_expected.not_to be_loaded("RelativeD")
   end
 
   before(:all) do
