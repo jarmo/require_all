@@ -1,8 +1,9 @@
 rvm:
- - 1.9.3
+ - 2.2.1
+ - 2.1.5
  - 2.0.0
- - jruby-19mode
- - rbx-19mode
+ - jruby
+ - rbx
  - ruby-head
 notifications:
   recipients:
