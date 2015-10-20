@@ -67,6 +67,11 @@ shared_examples_for "#autoload_all syntactic sugar" do
     expect {send(@method, "not_found")}.to raise_error(LoadError)
   end
 
+  it "can handle empty directories" do
+    expect {send(@method, "#{@base_dir}/empty_dir")}.to_not raise_error
+    expect {send(@method, "#{@base_dir}/nested")}.to_not raise_error
+  end
+
   it "raises LoadError if :base_dir doesn't exist" do
     expect {send(@method, @base_dir, :base_dir => @base_dir + "/non_existing_dir")}.
             to raise_exception(LoadError)

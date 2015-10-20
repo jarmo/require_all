@@ -65,4 +65,9 @@ shared_examples_for "#require_all syntactic sugar" do
   it "throws LoadError if no file or directory found" do
     expect {send(@method, "not_found")}.to raise_error(LoadError)
   end
+
+  it "can handle empty directories" do
+    expect {send(@method, "#{@base_dir}/empty_dir")}.to_not raise_error
+    expect {send(@method, "#{@base_dir}/nested")}.to_not raise_error
+  end
 end
