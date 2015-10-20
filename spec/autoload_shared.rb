@@ -68,6 +68,11 @@ shared_examples_for "#autoload_all syntactic sugar" do
   end
 
   it "can handle empty directories" do
+    # Have to make these on the fly because they can't be saved as a test fixture because Git won't track directories with nothing in them.
+    FileUtils.mkpath("#{@base_dir}/empty_dir")
+    FileUtils.mkpath("#{@base_dir}/nested/empty_dir")
+    FileUtils.mkpath("#{@base_dir}/nested/more_nested/empty_dir")
+
     expect {send(@method, "#{@base_dir}/empty_dir")}.to_not raise_error
     expect {send(@method, "#{@base_dir}/nested")}.to_not raise_error
   end
