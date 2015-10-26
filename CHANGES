@@ -1,3 +1,7 @@
+1.3.3:
+
+* Support empty directories without crashing. Issue #11. Thanks to Eric Kessler.
+
 1.3.2:
 
 * Add license to gemspec.
