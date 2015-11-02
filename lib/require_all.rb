@@ -81,7 +81,7 @@ module RequireAll
       end
     end
 
-     return if files.empty?
+    return if files.empty?
 
     if options[:method] == :autoload
       files.map! { |file_| [file_, File.expand_path(file_)] }
