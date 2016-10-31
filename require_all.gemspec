@@ -9,8 +9,7 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
-  s.homepage = "http://github.com/jarmo/require_all"
-  s.license = "MIT" 
+  s.homepage = "http://github.com/jarmo/require_all" 
 
   s.has_rdoc = true
   s.rdoc_options = %w(--title require_all --main README.md --line-numbers)
