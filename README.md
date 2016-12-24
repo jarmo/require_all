@@ -125,4 +125,4 @@ You can reach the author on github or by email [jarmo.p@gmail.com](mailto:jarmo.
 
 Jarmo Pertman
 
-MIT (see the LICENSE file for details)
+(see the LICENSE file for details)
