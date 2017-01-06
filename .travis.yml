@@ -2,7 +2,7 @@ rvm:
  - 2.4.0
  - 2.3.3
  - 2.2.6
- - jruby
+ - jruby-19mode
  - rbx-3
  - ruby-head
 notifications:
