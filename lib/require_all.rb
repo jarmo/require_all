@@ -72,7 +72,7 @@ module RequireAll
         # Maybe it's an .rb file and the .rb was omitted
         if File.file?(arg + '.rb')
           file = arg + '.rb'
-          options[:method] != :autoload ? Kernel.send(options[:method], file) : __autoload(file, file, options)
+          options[:method] != :autoload ? __require(options[:method], file) : __autoload(file, file, options)
           return true
         end
 
@@ -105,7 +105,7 @@ module RequireAll
       # files can be loaded, indicating unresolvable dependencies.
       files.each do |file_|
         begin
-          Kernel.send(options[:method], file_)
+          __require(options[:method], file_)
         rescue NameError => ex
           failed << file_
           first_name_error ||= ex
@@ -238,6 +238,10 @@ module RequireAll
   end
 
   private
+
+  def __require(method, file)
+    Kernel.send(method, file)
+  end
 
   def __autoload(file, full_path, options)
     last_module = "Object" # default constant where namespaces are created into
