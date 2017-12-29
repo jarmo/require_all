@@ -16,6 +16,14 @@ describe "autoload_all" do
     is_expected.not_to be_loaded("Autoloaded::WrongModule::WithWrongModule", "WrongModule::WithWrongModule")
   end
 
+  it "autoloads class nested into another class" do
+    is_expected.not_to be_loaded("Autoloaded::Class1", "Autoloaded::Class1::C")
+    autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded"
+    is_expected.to be_loaded("Autoloaded::Class1")
+    expect(Autoloaded::Class1).to be_a Class
+    is_expected.to be_loaded("Autoloaded::Class1::C")
+  end
+
   it "needs to specify base_dir for autoloading if loading something from under top-level module directory" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
     autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded/module1"
