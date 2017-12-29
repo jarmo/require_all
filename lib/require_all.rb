@@ -259,15 +259,16 @@ module RequireAll
       without_ext = entry.basename(entry.extname).to_s
       const = without_ext.split("_").map {|word| word.capitalize}.join
 
-      if entry.directory?
-        mod.class_eval "module #{const} end"
-        last_module += "::#{const}"
-      else
+      if entry.file? || (entry.directory? && entry.sub_ext('.rb').file?)
         mod.class_eval do
           puts "autoloading #{mod}::#{const} from #{full_path}" if $DEBUG
           autoload const, full_path
         end
+      else
+        mod.class_eval "module #{const} end" if entry.directory?
       end
+
+      last_module += "::#{const}" if entry.directory?
     end
   end
 
