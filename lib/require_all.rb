@@ -35,7 +35,7 @@ module RequireAll
     # Handle passing an array as an argument
     args.flatten!
 
-    options = {:method => :require}
+    options = {method: :require}
     options.merge!(args.pop) if args.last.is_a?(Hash)
 
     if args.empty?
@@ -156,7 +156,7 @@ module RequireAll
 
   # Loads all files like require_all instead of requiring
   def load_all(*paths)
-    require_all paths, :method => :load
+    require_all paths, method: :load
   end
 
   # Loads all files by using relative paths of the caller rather than
@@ -167,7 +167,7 @@ module RequireAll
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
-      require_all File.join(source_directory, path), :method => :load
+      require_all File.join(source_directory, path), method: :load
     end
   end
 
@@ -197,7 +197,7 @@ module RequireAll
   # For example loading only my_file.rb from dir1/dir2 with autoload_all:
   #
   #   autoload_all File.dirname(__FILE__) + '/dir1/dir2/my_file',
-  #                :base_dir => File.dirname(__FILE__) + '/dir1'
+  #                base_dir: File.dirname(__FILE__) + '/dir1'
   #
   # WARNING: All modules will be created even if files themselves aren't loaded yet, meaning
   # that all the code which depends of the modules being loaded or not will not work, like usages
@@ -212,11 +212,11 @@ module RequireAll
     return false if paths.empty?
     require "pathname"
 
-    options = {:method => :autoload}
+    options = {method: :autoload}
     options.merge!(paths.pop) if paths.last.is_a?(Hash)
 
     paths.each do |path|
-      require_all path, {:base_dir => path}.merge(options)
+      require_all path, {base_dir: path}.merge(options)
     end
   end
 
@@ -226,14 +226,14 @@ module RequireAll
     return false if paths.empty?
     require "pathname"
 
-    options = {:method => :autoload}
+    options = {method: :autoload}
     options.merge!(paths.pop) if paths.last.is_a?(Hash)
 
     source_directory = File.dirname caller.first.sub(/:\d+$/, '')
     paths.each do |path|
       file_path = Pathname.new(source_directory).join(path).to_s
-      require_all file_path, {:method => :autoload,
-                              :base_dir => source_directory}.merge(options)
+      require_all file_path, {method: :autoload,
+                              base_dir: source_directory}.merge(options)
     end
   end
 

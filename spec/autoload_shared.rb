@@ -9,18 +9,18 @@ shared_examples_for "#autoload_all syntactic sugar" do
 
   it "accepts files with and without extensions" do
     is_expected.not_to be_loaded("Autoloaded::Module2::LongerName")
-    expect(send(@method, @base_dir + '/module2/longer_name', :base_dir => @autoload_base_dir)).to be_truthy
+    expect(send(@method, @base_dir + '/module2/longer_name', base_dir: @autoload_base_dir)).to be_truthy
     is_expected.to be_loaded("Autoloaded::Module2::LongerName")
 
     is_expected.not_to be_loaded("Autoloaded::Module1::A")
-    expect(send(@method, @base_dir + '/module1/a.rb', :base_dir => @autoload_base_dir)).to be_truthy
+    expect(send(@method, @base_dir + '/module1/a.rb', base_dir: @autoload_base_dir)).to be_truthy
     is_expected.to be_loaded("Autoloaded::Module1::A")
   end
 
   it "accepts lists of files" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                          "Autoloaded::Module2::Module3::B")
-    expect(send(@method, @file_list, :base_dir => @autoload_base_dir)).to be_truthy
+    expect(send(@method, @file_list, base_dir: @autoload_base_dir)).to be_truthy
     is_expected.to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                      "Autoloaded::Module2::Module3::B")
   end
@@ -28,7 +28,7 @@ shared_examples_for "#autoload_all syntactic sugar" do
   it "is totally cool with a splatted list of arguments" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                          "Autoloaded::Module2::Module3::B")
-    expect(send(@method, *(@file_list << {:base_dir => @autoload_base_dir}))).to be_truthy
+    expect(send(@method, *(@file_list << {base_dir: @autoload_base_dir}))).to be_truthy
     is_expected.to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                      "Autoloaded::Module2::Module3::B")
   end
@@ -36,7 +36,7 @@ shared_examples_for "#autoload_all syntactic sugar" do
   it "will load all .rb files under a directory without a trailing slash" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                          "Autoloaded::Module2::Module3::B")
-    expect(send(@method, @base_dir, :base_dir => @autoload_base_dir)).to be_truthy
+    expect(send(@method, @base_dir, base_dir: @autoload_base_dir)).to be_truthy
     is_expected.to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                      "Autoloaded::Module2::Module3::B")
   end
@@ -44,7 +44,7 @@ shared_examples_for "#autoload_all syntactic sugar" do
   it "will load all .rb files under a directory with a trailing slash" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                          "Autoloaded::Module2::Module3::B")
-    expect(send(@method, "#{@base_dir}/", :base_dir => @autoload_base_dir)).to be_truthy
+    expect(send(@method, "#{@base_dir}/", base_dir: @autoload_base_dir)).to be_truthy
     is_expected.to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                      "Autoloaded::Module2::Module3::B")
   end
@@ -52,7 +52,7 @@ shared_examples_for "#autoload_all syntactic sugar" do
   it "will load all files specified by a glob" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                          "Autoloaded::Module2::Module3::B")
-    expect(send(@method, "#{@base_dir}/**/*.rb", :base_dir => @autoload_base_dir)).to be_truthy
+    expect(send(@method, "#{@base_dir}/**/*.rb", base_dir: @autoload_base_dir)).to be_truthy
     is_expected.to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName",
                      "Autoloaded::Module2::Module3::B")
   end
@@ -78,7 +78,7 @@ shared_examples_for "#autoload_all syntactic sugar" do
   end
 
   it "raises LoadError if :base_dir doesn't exist" do
-    expect {send(@method, @base_dir, :base_dir => @base_dir + "/non_existing_dir")}.
+    expect {send(@method, @base_dir, base_dir: @base_dir + "/non_existing_dir")}.
             to raise_exception(LoadError)
   end
 end

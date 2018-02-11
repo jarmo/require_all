@@ -92,7 +92,7 @@ autoload_all File.dirname(__FILE__) + "/dir1"
 ```ruby
 # lib/dir1/other_file.rb
 autoload_all File.dirname(__FILE__) + "/dir2/my_file.rb",
-             :base_dir => File.dirname(__FILE__) + "/../dir1"
+             base_dir: File.dirname(__FILE__) + "/../dir1"
 ```
   
 * All namespaces will be created dynamically by `autoload_all` - this means that `defined?(Dir1)` will
@@ -100,7 +100,7 @@ autoload_all File.dirname(__FILE__) + "/dir2/my_file.rb",
 
 Of course there's also an `autoload_rel` method:
 ```ruby
-autoload_rel "dir2/my_file.rb", :base_dir => File.dirname(__FILE__) + "/../dir1"
+autoload_rel "dir2/my_file.rb", base_dir: File.dirname(__FILE__) + "/../dir1"
 ```
 
 If having some problems with `autoload_all` or `autoload_rel` then set `$DEBUG=true` to see how files

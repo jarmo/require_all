@@ -30,7 +30,7 @@ describe "autoload_all" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
 
     autoload_all File.dirname(__FILE__) + "/fixtures/autoloaded/module1",
-                 :base_dir => File.dirname(__FILE__) + "/fixtures/autoloaded"
+                 base_dir: File.dirname(__FILE__) + "/fixtures/autoloaded"
     is_expected.to be_loaded("Autoloaded::Module1::A")
     is_expected.not_to be_loaded("Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
   end
@@ -59,7 +59,7 @@ describe "autoload_rel" do
     is_expected.not_to be_loaded("Autoloaded::Module1::A", "Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
 
     autoload_rel "./fixtures/autoloaded/module1",
-                 :base_dir => File.dirname(__FILE__) + "/fixtures/autoloaded"
+                 base_dir: File.dirname(__FILE__) + "/fixtures/autoloaded"
     is_expected.to be_loaded("Autoloaded::Module1::A")
     is_expected.not_to be_loaded("Autoloaded::Module2::LongerName", "Autoloaded::Module2::Module3::B")
   end
