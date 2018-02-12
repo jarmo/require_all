@@ -2,11 +2,11 @@ require File.dirname(__FILE__) + '/spec_helper.rb'
 require File.dirname(__FILE__) + '/require_shared.rb'
 
 describe "load_all" do
-  
+
   subject { self }
 
   it "provides require_all functionality but using 'load' instead of 'require'" do
-    require_all File.dirname(__FILE__) + '/fixtures/resolvable'
+    require_all fixture_path('resolvable')
     expect(C.new).to be_cool
 
     class C
@@ -18,12 +18,12 @@ describe "load_all" do
     expect(C.new).not_to be_cool
     C.send :remove_method, :cool?
 
-    load_all File.dirname(__FILE__) + '/fixtures/resolvable'
+    load_all fixture_path('resolvable')
     expect(C.new).to be_cool
   end
 
   before(:all) do
-    @base_dir = File.dirname(__FILE__) + '/fixtures/autoloaded'
+    @base_dir = fixture_path('autoloaded')
     @method = :load_all
   end
   it_should_behave_like "#require_all syntactic sugar"
@@ -34,7 +34,7 @@ describe "load_rel" do
   subject { self }
 
   it "provides load_all functionality relative to the current file" do
-    require File.dirname(__FILE__) + '/fixtures/relative/d/d'
+    require fixture_path('relative/d/d')
 
     is_expected.to be_loaded("RelativeA", "RelativeC", "RelativeD")
     expect(RelativeD.new).to be_ok
@@ -48,7 +48,7 @@ describe "load_rel" do
     expect(RelativeD.new).not_to be_ok
     RelativeD.send :remove_method, :ok?
 
-    load File.dirname(__FILE__) + '/fixtures/relative/d/d.rb'
+    load fixture_path('relative/d/d.rb')
     expect(RelativeD.new).to be_ok
   end
 
