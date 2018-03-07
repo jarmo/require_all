@@ -6,6 +6,8 @@
   `NameError`s and later retrying files that failed to load) was fundamentally unsafe and can result
   in incorrect behaviour (for example issue #8, plus more detail and discussion in #21).
 
+  Thanks to Joe Horsnell (@joehorsnell)
+
 1.5.0:
 
 * Merged PR #13 (https://github.com/jarmo/require_all/pull/13).
