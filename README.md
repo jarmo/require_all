@@ -120,6 +120,4 @@ You can reach the author on github or by email [jarmo.p@gmail.com](mailto:jarmo.
 
 ## License
 
-Jarmo Pertman
-
-MIT (see the LICENSE file for details)
+MIT (see the [LICENSE](LICENSE) file for details)
