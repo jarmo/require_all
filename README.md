@@ -6,9 +6,9 @@
 A wonderfully simple way to load your code.
 
 Tired of futzing around with `require` statements everywhere, littering your code
-with `require File.dirname(__FILE__)` crap?  What if you could just 
-point something at a big directory full of code and have everything just 
-automagically load regardless of the dependency structure?  
+with `require File.dirname(__FILE__)` crap?  What if you could just
+point something at a big directory full of code and have everything just
+automagically load?
 
 Wouldn't that be nice?  Well, now you can!
 
@@ -61,9 +61,10 @@ to the current file (`__FILE__`) as opposed to loading files relative from the w
 
 `load_all` and `load_rel` methods also exist to use `Kernel#load` instead of `Kernel#require`!
 
-The proper order to in which to load files is determined automatically for you.
- 
-It's just that easy!  Code loading shouldn't be hard.
+Files are required in alphabetical order and if there are files in nested directories, they are
+required depth-first. If a `NameError` caused by a reference to an uninitialised constant is
+encountered during the requiring process, then a `RequireAll::LoadError` will be thrown,
+indicating the file that needs the dependency adding to.
 
 ## autoload_all
 
@@ -94,7 +95,7 @@ autoload_all File.dirname(__FILE__) + "/dir1"
 autoload_all File.dirname(__FILE__) + "/dir2/my_file.rb",
              base_dir: File.dirname(__FILE__) + "/../dir1"
 ```
-  
+
 * All namespaces will be created dynamically by `autoload_all` - this means that `defined?(Dir1)` will
   return `"constant"` even if `my_file.rb` is not yet loaded!
 
@@ -106,16 +107,12 @@ autoload_rel "dir2/my_file.rb", base_dir: File.dirname(__FILE__) + "/../dir1"
 If having some problems with `autoload_all` or `autoload_rel` then set `$DEBUG=true` to see how files
 are mapped to their respective modules and classes.
 
-## Methodology (except for autoload_{all|rel})
+## Version compatibility and upgrading
 
-* Enumerate the files to be loaded
-* Try to load all of the files.  If we encounter a `NameError` loading a 
-  particular file, store that file in a "try to load it later" list.
-* If all the files loaded, great, we're done! If not, go through the
-  "try to load it later" list again rescuing `NameError` the same way.
-* If we walk the whole "try to load it later" list and it doesn't shrink
-  at all, we've encountered an unresolvable dependency.  In this case,
-  `require_all` will rethrow the first `NameError` it encountered.
+As of version 2, RequireAll will raise a `RequireAll::LoadError` if it encounters a `NameError`
+caused by a reference to an uninitialised constant during the requiring process. As such, it is not
+backwards compatible with version 1.x, but simple to upgrade by adding any requires to load
+dependencies in files that need them. See [CHANGES](CHANGES) for more details.
 
 ## Questions? Comments? Concerns?
 

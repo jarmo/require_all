@@ -1,3 +1,11 @@
+2.0.0:
+
+* Merged PR #24 (https://github.com/jarmo/require_all/pull/24)
+Prior to version 2, RequireAll attempted to automatically resolve dependencies between files, thus
+allowing them to be required in any order. Whilst convenient, the approach used (of rescuing
+`NameError`s and later retrying files that failed to load) was fundamentally unsafe and can result
+in incorrect behaviour (for example issue #8, plus more detail and discussion in #21).
+
 1.5.0:
 
 * Merged PR #13 (https://github.com/jarmo/require_all/pull/13).

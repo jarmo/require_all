@@ -20,7 +20,7 @@ module SpecHelper
        RelativeA RelativeB RelativeC RelativeD}.each do |const|
       Object.send(:remove_const, const) rescue nil
     end
-    $LOADED_FEATURES.delete_if {|f| f =~ /autoloaded|relative|resolvable/}
+    $LOADED_FEATURES.delete_if {|f| f =~ /autoloaded|error|relative|resolvable/}
   end
 
   def loaded?(*klazzes)

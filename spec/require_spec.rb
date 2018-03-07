@@ -5,17 +5,30 @@ describe "require_all" do
 
   subject { self }
 
-  describe "dependency resolution" do
-    it "handles load ordering when dependencies are resolvable" do
+  context "when files correctly declare their dependencies" do
+    it "requires them successfully" do
       require_all fixture_path('resolvable/*.rb')
 
       is_expected.to be_loaded("A", "B", "C", "D")
     end
+  end
 
-    it "raises NameError if dependencies can't be resolved" do
+  context "errors" do
+    it "raises RequireAll:LoadError if files do not declare their dependencies" do
       expect do
         require_all fixture_path('unresolvable/*.rb')
-      end.to raise_error(NameError)
+      end.to raise_error(RequireAll::LoadError) do |error|
+        expect(error.cause).to be_a NameError
+        expect(error.message).to match /Please require the necessary files/
+      end
+    end
+
+    it "raises other NameErrors if encountered" do
+      expect do
+        require_all fixture_path('error')
+      end.to raise_error(NameError) do |error|
+        expect(error.message).to match /undefined local variable or method `non_existent_method'/
+      end
     end
   end
 
