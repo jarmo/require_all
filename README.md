@@ -112,7 +112,7 @@ are mapped to their respective modules and classes.
 As of version 2, RequireAll will raise a `RequireAll::LoadError` if it encounters a `NameError`
 caused by a reference to an uninitialised constant during the requiring process. As such, it is not
 backwards compatible with version 1.x, but simple to upgrade by adding any requires to load
-dependencies in files that need them. See [CHANGES](CHANGES) for more details.
+dependencies in files that need them. See [CHANGES](CHANGES.md) for more details.
 
 ## Questions? Comments? Concerns?
 
