@@ -226,7 +226,13 @@ module RequireAll
       mod = Object.class_eval(last_module)
 
       without_ext = entry.basename(entry.extname).to_s
-      const = without_ext.split("_").map {|word| word.capitalize}.join
+
+      const =
+        if defined? ActiveSupport::Inflector
+          ActiveSupport::Inflector.camelize(without_ext)
+        else
+          without_ext.split("_").map {|word| word.capitalize}.join
+        end
 
       if entry.file? || (entry.directory? && entry.sub_ext('.rb').file?)
         mod.class_eval do
