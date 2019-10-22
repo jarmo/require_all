@@ -1,3 +1,10 @@
+### 3.0.0:
+
+* Merged PR #29 (https://github.com/jarmo/require_all/pull/29)
+  Respect inflections defined by ActiveSupport when autoloading.
+
+  Thanks to James Le Cuirot (@chewi)
+
 ### 2.0.0:
 
 * Merged PR #24 (https://github.com/jarmo/require_all/pull/24)
